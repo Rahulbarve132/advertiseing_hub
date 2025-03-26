@@ -11,7 +11,6 @@ export function AdvertiserSidebar() {
     { icon: FileText, label: "Campaigns", href: "/dashboard/advertiser" },
     { icon: BarChart, label: "Analytics", href: "/dashboard/advertiser/analytics" },
     { icon: CreditCard, label: "Billing", href: "/dashboard/advertiser/billing" },
-    { icon: Users, label: "Audience", href: "/dashboard/advertiser/audience" },
     { icon: Settings, label: "Settings", href: "/dashboard/advertiser/settings" },
   ]
 

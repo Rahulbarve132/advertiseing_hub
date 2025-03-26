@@ -51,7 +51,7 @@ export function CampaignForm() {
             <TabsList>
               <TabsTrigger value="details">Campaign Details</TabsTrigger>
               <TabsTrigger value="creative">Creative Assets</TabsTrigger>
-              <TabsTrigger value="targeting">Audience Targeting</TabsTrigger>
+            
               <TabsTrigger value="budget">Budget & Schedule</TabsTrigger>
             </TabsList>
 
@@ -155,77 +155,7 @@ export function CampaignForm() {
               </div>
             </TabsContent>
 
-            <TabsContent value="targeting" className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="audience">Target Audience</Label>
-                <Select defaultValue="all">
-                  <SelectTrigger className="border-2">
-                    <SelectValue placeholder="Select target audience" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Readers</SelectItem>
-                    <SelectItem value="business">Business Professionals</SelectItem>
-                    <SelectItem value="tech">Technology Enthusiasts</SelectItem>
-                    <SelectItem value="lifestyle">Lifestyle Readers</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Age Range</Label>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="age-min" className="text-xs">
-                      Minimum Age
-                    </Label>
-                    <Select defaultValue="18">
-                      <SelectTrigger className="border-2">
-                        <SelectValue placeholder="Min Age" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {[18, 25, 35, 45, 55, 65].map((age) => (
-                          <SelectItem key={age} value={age.toString()}>
-                            {age}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="age-max" className="text-xs">
-                      Maximum Age
-                    </Label>
-                    <Select defaultValue="65">
-                      <SelectTrigger className="border-2">
-                        <SelectValue placeholder="Max Age" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {[25, 35, 45, 55, 65, 75].map((age) => (
-                          <SelectItem key={age} value={age.toString()}>
-                            {age}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Geographic Targeting</Label>
-                <Select defaultValue="national">
-                  <SelectTrigger className="border-2">
-                    <SelectValue placeholder="Select geographic targeting" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="national">National</SelectItem>
-                    <SelectItem value="regional">Regional</SelectItem>
-                    <SelectItem value="local">Local</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </TabsContent>
-
+            
             <TabsContent value="budget" className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="budget">Campaign Budget</Label>
@@ -286,24 +216,6 @@ export function CampaignForm() {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label>Billing Information</Label>
-                <div className="p-4 border-2 rounded-md">
-                  <div className="flex items-center mb-4">
-                    <div className="w-10 h-6 bg-muted rounded mr-2"></div>
-                    <div>
-                      <div className="text-sm">Visa ending in 4242</div>
-                      <div className="text-xs text-muted-foreground">Expires 12/25</div>
-                    </div>
-                    <Button variant="outline" size="sm" className="ml-auto">
-                      Change
-                    </Button>
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    Your card will be charged when your campaign is approved.
-                  </div>
-                </div>
-              </div>
             </TabsContent>
           </Tabs>
 
