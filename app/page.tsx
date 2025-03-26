@@ -3,6 +3,7 @@ import Image from "next/image"
 import { Coffee, Mail, Menu, Search, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { AdvertisementCarousel } from "@/components/advertisement-carousel"
 
 export default function Home() {
   const currentDate = new Date().toLocaleDateString("en-US", {
@@ -281,6 +282,13 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+
+        {/* Featured Advertisements */}
+        <section className="my-12 border-t  border-black py-8">
+          <h2 className="text-3xl md:text-4xl font-serif text-center mb-8">Featured Advertisements</h2>
+          <AdvertisementCarousel />
+        </section>
 
         {/* Testimonials Section */}
         <section className="my-12 border-t border-b border-black py-8">
