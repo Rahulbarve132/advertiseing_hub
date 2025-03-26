@@ -39,7 +39,7 @@ export function LoginForm() {
 
       toast({
         title: "Login successful!",
-        description: `Welcome back to The Daily Chronicle!`,
+        description: `Welcome back to The Advertiseing Hub!`,
       })
 
       // Redirect to the appropriate dashboard based on role

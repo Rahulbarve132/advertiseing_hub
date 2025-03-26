@@ -9,7 +9,7 @@ export default function SignupPage() {
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold">Create an Account</h1>
-            <p className="text-muted-foreground mt-2">Join The Daily Chronicle advertising platform</p>
+            <p className="text-muted-foreground mt-2">Join The Advertiseing Hub advertising platform</p>
           </div>
 
           <SignupForm />
@@ -27,7 +27,7 @@ export default function SignupPage() {
 
       <footer className="border-t py-6">
         <div className="container text-center text-sm">
-          <p>© {new Date().getFullYear()} The Daily Chronicle. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} The Advertiseing Hub. All rights reserved.</p>
         </div>
       </footer>
     </div>

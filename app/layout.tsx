@@ -5,7 +5,7 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "The Daily Chronicle - Premium Advertising Platform",
+  title: "The Advertiseing Hub - Premium Advertising Platform",
   description: "A retro newspaper-themed advertising platform for distinguished brands",
     generator: 'v0.dev'
 }

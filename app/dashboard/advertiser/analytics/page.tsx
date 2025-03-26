@@ -1,4 +1,3 @@
-import { SiteHeader } from "@/components/site-header"
 import { AdvertiserSidebar } from "@/components/advertiser-sidebar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"

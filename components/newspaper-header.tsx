@@ -27,7 +27,7 @@ export function NewspaperHeader() {
             <WeatherWidget />
           </div>
           <Link href="/" className="mx-auto">
-            <h1 className="font-serif text-5xl md:text-7xl font-bold tracking-tight uppercase">The Daily Chronicle</h1>
+            <h1 className="font-serif text-5xl md:text-7xl font-bold tracking-tight uppercase">The Advertiseing Hub</h1>
           </Link>
           <div className="hidden md:block w-1/4 text-right">
             <span className="font-serif italic text-sm">"All the News That's Fit to Print"</span>

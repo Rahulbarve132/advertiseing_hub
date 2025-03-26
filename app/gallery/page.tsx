@@ -20,7 +20,7 @@ export default function GalleryPage() {
         {/* Introduction */}
         <div className="max-w-3xl mx-auto mb-12">
           <p className="font-serif text-lg leading-relaxed first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-2">
-            The Daily Chronicle has had the privilege of showcasing exceptional advertisements from distinguished brands
+            The Advertiseing Hub has had the privilege of showcasing exceptional advertisements from distinguished brands
             across various industries. Our gallery features a selection of these advertisements, demonstrating the
             unique aesthetic and impact that our newspaper-themed environment provides.
           </p>

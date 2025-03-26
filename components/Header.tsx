@@ -17,7 +17,7 @@ export function Header() {
         {/* Logo - visible on all screens */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
-            <span className="text-2xl font-serif font-bold text-gray-900">The Daily Chronicle</span>
+            <span className="text-2xl font-serif font-bold text-gray-900">The Advertiseing Hub</span>
           </Link>
         </div>
 

@@ -1,4 +1,4 @@
-import { SiteHeader } from "@/components/site-header"
+
 import { AdvertiserSidebar } from "@/components/advertiser-sidebar"
 import { CampaignForm } from "@/components/campaign-form"
 

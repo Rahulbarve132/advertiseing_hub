@@ -8,7 +8,7 @@ export function SimpleFooter() {
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="font-serif text-xl font-bold mb-4">The Daily Chronicle</h3>
+            <h3 className="font-serif text-xl font-bold mb-4">The Advertiseing Hub</h3>
             <p className="font-serif text-sm">
               Premium advertising space in a unique retro newspaper-themed environment.
             </p>
@@ -159,7 +159,7 @@ export function SimpleFooter() {
           </div>
         </div>
         <div className="border-t border-white/20 mt-8 pt-8 text-center font-serif text-sm">
-          <p>© {new Date().getFullYear()} The Daily Chronicle. All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} The Advertiseing Hub. All Rights Reserved.</p>
           <p className="mt-2">Designed with a passion for the golden age of print advertising.</p>
         </div>
       </div>

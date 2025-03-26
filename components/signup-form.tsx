@@ -34,7 +34,7 @@ export function SignupForm() {
 
       toast({
         title: "Account created!",
-        description: `Welcome to The Daily Chronicle, ${name}!`,
+        description: `Welcome to The Advertiseing Hub, ${name}!`,
       })
 
       // Redirect to the appropriate dashboard based on role

@@ -21,7 +21,7 @@ export default function AdvertisePage() {
         {/* Introduction */}
         <div className="max-w-3xl mx-auto mb-12">
           <p className="font-serif text-lg leading-relaxed first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-2">
-            The Daily Chronicle offers a unique advertising platform that combines the timeless elegance of traditional
+            The Advertiseing Hub offers a unique advertising platform that combines the timeless elegance of traditional
             print with cutting-edge digital capabilities. Our newspaper-themed environment creates a distinctive context
             for your brand, allowing your message to stand out in an increasingly crowded digital landscape.
           </p>
@@ -331,7 +331,7 @@ export default function AdvertisePage() {
         <section className="bg-black text-white p-8 text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">Ready to Elevate Your Brand?</h2>
           <p className="font-serif text-lg mb-6 max-w-2xl mx-auto">
-            Contact our advertising team today to discuss how The Daily Chronicle can showcase your brand in a premium
+            Contact our advertising team today to discuss how The Advertiseing Hub can showcase your brand in a premium
             environment.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

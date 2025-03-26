@@ -31,7 +31,7 @@ export default function Home() {
             </div>
           </div>
           <h1 className="font-serif text-5xl md:text-7xl font-bold tracking-tight uppercase mx-auto">
-            The Daily Chronicle
+            The Advertiseing Hub
           </h1>
           <div className="hidden md:block w-1/4 text-right">
             <span className="font-serif italic text-sm">"All the News That's Fit to Print"</span>
@@ -159,14 +159,14 @@ export default function Home() {
               </div>
 
               <p className="font-serif text-lg leading-relaxed first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-2">
-                In an age of digital saturation, The Daily Chronicle offers a refreshing return to the golden era of
+                In an age of digital saturation, The Advertiseing Hub offers a refreshing return to the golden era of
                 advertising. Our premium newspaper-themed platform combines the timeless elegance of traditional print
                 with cutting-edge digital capabilities, creating an unparalleled advertising experience for discerning
                 brands.
               </p>
 
               <p className="font-serif text-lg leading-relaxed">
-                "The attention to detail and the unique aesthetic of The Daily Chronicle creates an environment where
+                "The attention to detail and the unique aesthetic of The Advertiseing Hub creates an environment where
                 advertisements don't just compete for attention—they command it," says Marketing Director Elizabeth
                 Harlow. "Our clients report engagement rates far exceeding industry standards."
               </p>
@@ -193,7 +193,7 @@ export default function Home() {
               </div>
 
               <p className="font-serif text-lg leading-relaxed">
-                With a dedicated team of design specialists, The Daily Chronicle works closely with advertisers to
+                With a dedicated team of design specialists, The Advertiseing Hub works closely with advertisers to
                 ensure each placement not only captures attention but resonates with our sophisticated audience. The
                 result is advertising that feels less like an interruption and more like a natural extension of the
                 reading experience.
@@ -311,7 +311,7 @@ export default function Home() {
             </div>
             <div className="border border-black p-6 bg-white hover:shadow-xl transition-shadow">
               <p className="font-serif text-lg italic mb-4">
-                "Our campaign in The Daily Chronicle delivered a 300% increase in brand recognition among our target
+                "Our campaign in The Advertiseing Hub delivered a 300% increase in brand recognition among our target
                 demographic."
               </p>
               <div className="flex items-center gap-2">
@@ -351,10 +351,10 @@ export default function Home() {
             Join distinguished brands that understand the value of premium presentation and targeted reach.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-white text-black hover:bg-white/90 rounded-none text-lg px-8">
+            <Button className="bg-white text-black hover:border-white hover:text-white hover:bg-white/10 rounded-none text-lg px-8">
               Request Media Kit
             </Button>
-            <Button variant="outline" className="text-white border-white hover:bg-white/10 rounded-none text-lg px-8">
+            <Button variant="outline" className="text-black border-white hover:text-white hover:bg-white/10 rounded-none text-lg px-8">
               Contact Sales Team
             </Button>
           </div>

@@ -20,7 +20,7 @@ export default function CaseStudiesPage() {
         {/* Introduction */}
         <div className="max-w-3xl mx-auto mb-12">
           <p className="font-serif text-lg leading-relaxed first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-2">
-            The true measure of an advertising platform lies in the results it delivers. At The Daily Chronicle, we take
+            The true measure of an advertising platform lies in the results it delivers. At The Advertiseing Hub, we take
             pride in the success our clients achieve through our premium newspaper-themed environment. These case
             studies showcase real campaigns and the measurable impact they've had for brands across various industries.
           </p>
@@ -377,7 +377,7 @@ export default function CaseStudiesPage() {
         <section className="bg-black text-white p-8 text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">Ready to Write Your Success Story?</h2>
           <p className="font-serif text-lg mb-6 max-w-2xl mx-auto">
-            Join our distinguished advertisers and experience the exceptional results that The Daily Chronicle delivers.
+            Join our distinguished advertisers and experience the exceptional results that The Advertiseing Hub delivers.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button className="bg-white text-black hover:bg-white/90 rounded-none text-lg px-8">
