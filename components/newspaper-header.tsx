@@ -15,28 +15,7 @@ export function NewspaperHeader() {
   return (
     <>
       {/* Top Bar */}
-      <div className="border-b border-black">
-        <div className="container flex items-center justify-between py-2">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-serif">{currentDate}</span>
-            <div className="h-4 w-px bg-black mx-2" />
-            <span className="text-xs font-serif">Vol. CXXII, No. 42</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <Search className="h-4 w-4" />
-              <span className="sr-only">Search</span>
-            </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <Mail className="h-4 w-4" />
-              <span className="sr-only">Subscribe</span>
-            </Button>
-            <Button variant="outline" size="sm" className="h-8 rounded-none border-black text-xs font-serif">
-              SUBSCRIBE
-            </Button>
-          </div>
-        </div>
-      </div>
+      
 
       {/* Masthead */}
       <header className="container py-6 text-center border-b border-black">

@@ -390,7 +390,6 @@ export default function CaseStudiesPage() {
         </section>
       </main>
 
-      <NewspaperFooter />
     </div>
   )
 }

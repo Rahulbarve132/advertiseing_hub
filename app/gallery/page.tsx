@@ -264,7 +264,7 @@ export default function GalleryPage() {
         </section>
       </main>
 
-      <NewspaperFooter />
+    
     </div>
   )
 }

@@ -17,7 +17,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+
+      
+      <body className={inter.className}>
+      <Header/>
+        {children}
+        <SimpleFooter/>
+        </body>
     </html>
   )
 }
@@ -25,3 +31,7 @@ export default function RootLayout({
 
 
 import './globals.css'
+import { Header } from "@/components/Header"
+import { SimpleFooter } from "@/components/simple-footer"
+
+

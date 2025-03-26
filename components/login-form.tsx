@@ -84,23 +84,9 @@ export function LoginForm() {
             {isLoading ? "Signing in..." : "Sign in"}
           </Button>
 
-          <div className="relative my-4">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t"></span>
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
-            </div>
-          </div>
+          
 
-          <div className="grid grid-cols-2 gap-4">
-            <Button variant="outline" type="button" disabled={isLoading} className="border-2">
-              Google
-            </Button>
-            <Button variant="outline" type="button" disabled={isLoading} className="border-2">
-              Apple
-            </Button>
-          </div>
+          
         </CardContent>
       </Card>
     </form>

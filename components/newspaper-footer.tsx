@@ -146,7 +146,7 @@ export function NewspaperFooter() {
             </div>
             <div className="space-y-2">
               <p className="font-serif text-sm mb-2">Subscribe to our newsletter:</p>
-              <form className="flex gap-2">
+              <form className="flex ">
                 <input
                   type="email"
                   placeholder="Email Address"
