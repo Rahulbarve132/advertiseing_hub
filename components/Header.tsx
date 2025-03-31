@@ -33,51 +33,38 @@ export function Header() {
             />
           </div>
 
-          {/* Navigation Buttons */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center gap-1">
-                Categories <ChevronDown className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <Link href="/category/cars" className="w-full">
-                  Cars
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href="/category/electronics" className="w-full">
-                  Electronics
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href="/category/real-estate" className="w-full">
-                  Real Estate
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href="/category/jobs" className="w-full">
-                  Jobs
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href="/category/services" className="w-full">
-                  Services
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          
 
-          <Button variant="ghost" className="flex items-center gap-1">
-            <Bell className="h-4 w-4" />
-            <span className="hidden lg:inline">Notifications</span>
-          </Button>
+          <div className="flex items-center gap-8 px-4">
+          <div>
+            <Link href="/" className="text-sm font-semibold">
+              Home
+            </Link>
+          </div>
+          <div>
+            <Link href="/advertise" className="text-sm font-semibold">
+              Advertise
+            </Link>
+          </div>
+          <div className="w-24">
+            <Link href="/case-studies" className="text-sm font-semibold">
+              Case Studies
+            </Link>
+          </div>
+          <div>
+            <Link href="/gallery" className="text-sm font-semibold">
+              Gallery
+            </Link>
+          </div>
+          <div className="flex items-center gap-1">
+            <Link href="/contact" className="text-sm font-semibold">
+              Contact
+            </Link>
+          </div>
+          </div>
+        
 
-          <Button variant="ghost" className="flex items-center gap-1">
-            <LayoutDashboard className="h-4 w-4" />
-            <span className="hidden lg:inline">Dashboard</span>
-          </Button>
+          
 
           <div className="flex items-center gap-2">
             <Link href="/login">

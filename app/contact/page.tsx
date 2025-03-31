@@ -6,7 +6,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { NewspaperHeader } from "@/components/newspaper-header"
-import { NewspaperFooter } from "@/components/newspaper-footer"
 import { Mail, Phone, MapPin, Clock } from "lucide-react"
 
 export default function ContactPage() {
@@ -301,7 +300,7 @@ export default function ContactPage() {
             <Button className="bg-white text-black hover:bg-white/90 rounded-none text-lg px-8">
               <Link href="/media-kit">Download Media Kit</Link>
             </Button>
-            <Button variant="outline" className="text-white border-white hover:bg-white/10 rounded-none text-lg px-8">
+            <Button variant="outline" className="text-black hover:text-white border-white hover:bg-white/10 rounded-none text-lg px-8">
               <Link href="/advertise">View Advertising Options</Link>
             </Button>
           </div>

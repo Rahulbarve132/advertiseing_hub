@@ -3,7 +3,6 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { NewspaperHeader } from "@/components/newspaper-header"
-import { NewspaperFooter } from "@/components/newspaper-footer"
 
 export default function GalleryPage() {
   return (
@@ -257,7 +256,7 @@ export default function GalleryPage() {
             <Button className="bg-white text-black hover:bg-white/90 rounded-none text-lg px-8">
               <Link href="/contact">Contact Our Design Team</Link>
             </Button>
-            <Button variant="outline" className="text-white border-white hover:bg-white/10 rounded-none text-lg px-8">
+            <Button variant="outline" className="text-black hover:text-white border-white hover:bg-white/10 rounded-none text-lg px-8">
               <Link href="/advertise">View Advertising Options</Link>
             </Button>
           </div>

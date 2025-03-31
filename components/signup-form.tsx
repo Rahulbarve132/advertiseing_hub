@@ -23,26 +23,47 @@ export function SignupForm() {
     const formData = new FormData(event.currentTarget)
     const email = formData.get("email") as string
     const password = formData.get("password") as string
-    const name = formData.get("name") as string
-    const company = formData.get("company") as string
-    const role = formData.get("role") as string
+    const fullName = formData.get("name") as string
+    const companyName = formData.get("company") as string
+    const userRole = formData.get("role") as string
 
-    // In a real application, you would call a server action or API endpoint here
+    // Convert role to match API expectations (uppercase)
+    const role = userRole.toUpperCase()
+
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      // Call the actual API endpoint
+      const response = await fetch('https://advertisemedia.onrender.com/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          fullName,
+          companyName,
+          email,
+          password,
+          role
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Registration failed');
+      }
+
+      const data = await response.json();
 
       toast({
         title: "Account created!",
-        description: `Welcome to The Advertiseing Hub, ${name}!`,
+        description: `Welcome to The Advertising Hub, ${fullName}!`,
       })
 
       // Redirect to the appropriate dashboard based on role
-      router.push(`/dashboard/${role.toLowerCase()}`)
+      router.push(`/dashboard/${userRole.toLowerCase()}`);
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
+        title: "Registration Error",
+        description: error instanceof Error ? error.message : "Something went wrong. Please try again.",
         variant: "destructive",
       })
     } finally {
@@ -131,4 +152,3 @@ export function SignupForm() {
     </form>
   )
 }
-

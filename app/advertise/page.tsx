@@ -338,7 +338,7 @@ export default function AdvertisePage() {
             <Button className="bg-white text-black hover:bg-white/90 rounded-none text-lg px-8">
               <Link href="/contact">Contact Sales Team</Link>
             </Button>
-            <Button variant="outline" className="text-white border-white hover:bg-white/10 rounded-none text-lg px-8">
+            <Button variant="outline" className="text-black hover:text-white border-white hover:bg-white/10 rounded-none text-lg px-8">
               <Link href="/media-kit">Download Media Kit</Link>
             </Button>
           </div>
