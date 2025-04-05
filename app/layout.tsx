@@ -1,6 +1,11 @@
 import type React from "react"
 import { Inter } from "next/font/google"
-import "./globals.css"
+import './globals.css'
+import { Header } from "@/components/Header"
+import { SimpleFooter } from "@/components/simple-footer"
+import { AuthProvider } from "@/contexts/auth-context"
+
+
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -20,9 +25,11 @@ export default function RootLayout({
 
       
       <body className={inter.className}>
+      <AuthProvider>
       <Header/>
         {children}
         <SimpleFooter/>
+      </AuthProvider>
         </body>
     </html>
   )
@@ -30,8 +37,6 @@ export default function RootLayout({
 
 
 
-import './globals.css'
-import { Header } from "@/components/Header"
-import { SimpleFooter } from "@/components/simple-footer"
+
 
 
