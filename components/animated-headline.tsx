@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useAppDispatch, useAppSelector } from "../redux/hooks"
 
 export function AnimatedHeadline() {
   const headlines = [
@@ -11,7 +12,7 @@ export function AnimatedHeadline() {
     "Exclusive: Interview with marketing director on effective retro advertising",
   ]
 
-  const [currentHeadline, setCurrentHeadline] = useState(0)
+  const [currentHeadline, setCurrentHeadline] = useState(0)  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -30,7 +31,7 @@ export function AnimatedHeadline() {
           </span>
         ))}
       </div>
-    </div>
+    </div>  
   )
 }
 

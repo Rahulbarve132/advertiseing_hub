@@ -1,31 +1,37 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useDispatch, useSelector } from 'react-redux'
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast"
-import { useAuth } from "@/contexts/auth-context"
+import { setCredentials, setLoading, setError, clearError } from '@/redux/features/authSlice'
+import type { AppDispatch, RootState } from '@/redux/store'
 
 export function LoginForm() {
   const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
-  const { setIsLoggedIn } = useAuth()
+  const dispatch = useDispatch<AppDispatch>()
+  const { loading, error } = useSelector((state: RootState) => state.auth ?? { loading: false, error: null })
+
+  useEffect(() => {
+    dispatch(clearError())
+  }, [dispatch])
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    setIsLoading(true)
+    dispatch(setLoading(true))
+    dispatch(clearError())
 
     const formData = new FormData(event.currentTarget)
     const email = formData.get("email") as string
     const password = formData.get("password") as string
 
     try {
-      // Call the actual API endpoint
       const response = await fetch('https://advertisemedia.onrender.com/api/auth/login', {
         method: 'POST',
         headers: {
@@ -34,37 +40,38 @@ export function LoginForm() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Login failed');
       }
 
-      // Assuming the API returns user data including a role
-      const role = data.user?.role || 'user';
-
-      // Store auth token if provided by the API
-      if (data.token) {
-        localStorage.setItem('authToken', data.token);
-        setIsLoggedIn(true);  // Set login state to true after successful login
-      }
+      const data = await response.json();
+      dispatch(setCredentials({
+        message: "Login successful",
+        token: data.token,
+        user: data.user
+      }));
 
       toast({
         title: "Login successful!",
         description: `Welcome back to The Advertising Hub!`,
       })
 
-      // Redirect to the appropriate dashboard based on role
-      router.push(`/dashboard/${role.toLowerCase()}`);
+      if (data.user && data.user.role) {
+        router.push(`/dashboard/${data.user.role.toLowerCase()}`);
+      } else {
+        throw new Error("User role is missing in the response.");
+      }
     } catch (error) {
-      setIsLoggedIn(false);  // Ensure login state is false on error
+      const errorMessage = error instanceof Error ? error.message : "Invalid email or password. Please try again."
+      dispatch(setError(errorMessage));
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Invalid email or password. Please try again.",
+        title: "Login Error",
+        description: errorMessage,
         variant: "destructive",
       })
     } finally {
-      setIsLoading(false)
+      dispatch(setLoading(false))
     }
   }
 
@@ -80,7 +87,7 @@ export function LoginForm() {
               type="email"
               placeholder="name@example.com"
               required
-              disabled={isLoading}
+              disabled={loading}
               className="border-2"
             />
           </div>
@@ -91,10 +98,10 @@ export function LoginForm() {
                 Forgot password?
               </Link>
             </div>
-            <Input id="password" name="password" type="password" required disabled={isLoading} className="border-2" />
+            <Input id="password" name="password" type="password" required disabled={loading} className="border-2" />
           </div>
-          <Button type="submit" className="w-full uppercase" disabled={isLoading}>
-            {isLoading ? "Signing in..." : "Sign in"}
+          <Button type="submit" className="w-full uppercase" disabled={loading}>
+            {loading ? "Signing in..." : "Sign in"}
           </Button>
         </CardContent>
       </Card>

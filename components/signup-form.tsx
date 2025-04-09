@@ -1,9 +1,9 @@
 "use client"
 
 import type React from "react"
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useDispatch, useSelector } from 'react-redux'
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -12,13 +12,22 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "@/components/ui/use-toast"
 
+import { setCredentials, setLoading, setError, clearError } from '@/./redux/features/authSlice'
+import type { AppDispatch, RootState } from '@/redux/store'
+
 export function SignupForm() {
   const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  const dispatch = useDispatch<AppDispatch>()
+  const { loading, error } = useSelector((state: RootState) => state.auth ?? { loading: false, error: null })
+
+  useEffect(() => {
+    dispatch(clearError())
+  }, [dispatch])
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    setIsLoading(true)
+    dispatch(setLoading(true))
+    dispatch(clearError())
 
     const formData = new FormData(event.currentTarget)
     const email = formData.get("email") as string
@@ -26,12 +35,9 @@ export function SignupForm() {
     const fullName = formData.get("name") as string
     const companyName = formData.get("company") as string
     const userRole = formData.get("role") as string
-
-    // Convert role to match API expectations (uppercase)
     const role = userRole.toUpperCase()
 
     try {
-      // Call the actual API endpoint
       const response = await fetch('https://advertisemedia.onrender.com/api/auth/register', {
         method: 'POST',
         headers: {
@@ -52,22 +58,28 @@ export function SignupForm() {
       }
 
       const data = await response.json();
-
+      dispatch(setCredentials({
+        message: data.message,
+        token: data.token,
+        user: data.user
+      }));
+      console.log(data)
+      console.log(data.user)
+      
       toast({
-        title: "Account created!",
-        description: `Welcome to The Advertising Hub, ${fullName}!`,
-      })
-
-      // Redirect to the appropriate dashboard based on role
+        title: "Success",
+        description: data.message,
+      });
+      
       router.push(`/dashboard/${userRole.toLowerCase()}`);
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Something went wrong. Please try again."
+      dispatch(setError(errorMessage));
       toast({
         title: "Registration Error",
-        description: error instanceof Error ? error.message : "Something went wrong. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       })
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -78,7 +90,7 @@ export function SignupForm() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="name">Full Name</Label>
-              <Input id="name" name="name" placeholder="John Doe" required disabled={isLoading} className="border-2" />
+              <Input id="name" name="name" placeholder="John Doe" required disabled={loading} className="border-2" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="company">Company Name</Label>
@@ -87,7 +99,7 @@ export function SignupForm() {
                 name="company"
                 placeholder="Acme Inc."
                 required
-                disabled={isLoading}
+                disabled={loading}
                 className="border-2"
               />
             </div>
@@ -100,13 +112,13 @@ export function SignupForm() {
               type="email"
               placeholder="name@example.com"
               required
-              disabled={isLoading}
+              disabled={loading}
               className="border-2"
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" name="password" type="password" required disabled={isLoading} className="border-2" />
+            <Input id="password" name="password" type="password" required disabled={loading} className="border-2" />
           </div>
           <div className="space-y-2">
             <Label>Account Type</Label>
@@ -144,8 +156,8 @@ export function SignupForm() {
               </Link>
             </Label>
           </div>
-          <Button type="submit" className="w-full uppercase" disabled={isLoading}>
-            {isLoading ? "Creating account..." : "Create account"}
+          <Button type="submit" className="w-full uppercase" disabled={loading}>
+            {loading ? "Creating account..." : "Create account"}
           </Button>
         </CardContent>
       </Card>

@@ -3,14 +3,12 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SimpleHeader } from "@/components/simple-header"
-import { SimpleFooter } from "@/components/simple-footer"
+import { NewspaperHeader } from "@/components/newspaper-header"
 
 export default function AdvertisePage() {
   return (
-    <div className="min-h-screen bg-[#f8f3e9] text-[#2b2b2b]">
-      <SimpleHeader />
-
+    <div className="min-h-screen bg-[#f8f3e9] text-[#2b2b2b]"> 
+      <NewspaperHeader/>
       <main className="container py-8">
         {/* Page Title */}
         <div className="border-b-2 border-black mb-8 pb-4">
