@@ -1,15 +1,41 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Search, Menu, X, LayoutDashboard, Bell, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useSelector, useDispatch } from "react-redux"
+import { RootState } from "@/redux/store"
+import { logout } from "@/redux/features/authSlice"
+
+import { useRouter } from "next/navigation"
 
 export function Header() {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated) 
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  useEffect(() => {
+    // This will run whenever isAuthenticated changes
+    console.log('Authentication status changed:', isAuthenticated)
+    // Add any additional logic you need when auth state changes
+  }, [isAuthenticated])
+
+  const handleLogout = async () => {
+    try {
+      setIsLoggingOut(true);
+      dispatch(logout()); // Clear user state
+      router.push('/'); // Redirect to home page
+    } catch (error) {
+      console.error('Logout failed:', error);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-[#f8f5e9] shadow-sm">
@@ -66,15 +92,28 @@ export function Header() {
 
           
 
+          {/* Desktop Auth Buttons */}
           <div className="flex items-center gap-2">
-            <Link href="/login">
-            <Button variant="outline" className="hidden sm:flex">
-              Sign In
-            </Button>
-            </Link>
-            <Link href="/signup">
-            <Button>Register</Button></Link>
-            
+            {isAuthenticated ? (
+              <Button 
+                variant="outline" 
+                onClick={handleLogout} 
+                disabled={isLoggingOut}
+              >
+                {isLoggingOut ? 'Logging out...' : 'Logout'}
+              </Button>
+            ) : (
+              <>
+                <Link href="/login">
+                  <Button variant="outline" className="hidden sm:flex">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/signup">
+                  <Button>Register</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
@@ -147,11 +186,20 @@ export function Header() {
                   </div>
                 </nav>
 
+                {/* Mobile Auth Buttons */}
                 <div className="mt-auto border-t py-4 space-y-4">
-                  <Button className="w-full">Register</Button>
-                  <Button variant="outline" className="w-full">
-                    Sign In
-                  </Button>
+                  {isAuthenticated ? (
+                    <Button className="w-full" onClick={handleLogout}>
+                      Logout
+                    </Button>
+                  ) : (
+                    <>
+                      <Button className="w-full">Register</Button>
+                      <Button variant="outline" className="w-full">
+                        Sign In
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </SheetContent>

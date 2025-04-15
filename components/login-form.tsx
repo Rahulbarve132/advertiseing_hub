@@ -20,6 +20,7 @@ export function LoginForm() {
 
   useEffect(() => {
     dispatch(clearError())
+    dispatch(setLoading(false)) // Reset loading state when the component is mounted
   }, [dispatch])
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {

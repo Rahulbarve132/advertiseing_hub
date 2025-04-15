@@ -52,7 +52,7 @@ export function CampaignForm() {
               <TabsTrigger value="details">Campaign Details</TabsTrigger>
               <TabsTrigger value="creative">Creative Assets</TabsTrigger>
             
-              <TabsTrigger value="budget">Budget & Schedule</TabsTrigger>
+              {/* <TabsTrigger value="budget">Budget & Schedule</TabsTrigger> */}
             </TabsList>
 
             <TabsContent value="details" className="space-y-4">
@@ -156,7 +156,7 @@ export function CampaignForm() {
             </TabsContent>
 
             
-            <TabsContent value="budget" className="space-y-4">
+            {/* <TabsContent value="budget" className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="budget">Campaign Budget</Label>
                 <div className="relative">
@@ -216,7 +216,7 @@ export function CampaignForm() {
                 />
               </div>
 
-            </TabsContent>
+            </TabsContent> */}
           </Tabs>
 
           <div className="flex justify-end gap-4 mt-6">

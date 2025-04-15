@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "@/components/ui/use-toast"
 
-import { setCredentials, setLoading, setError, clearError } from '@/./redux/features/authSlice'
+import { setCredentials, setLoading, setError, clearError, logout } from '@/redux/features/authSlice'
 import type { AppDispatch, RootState } from '@/redux/store'
 
 export function SignupForm() {
@@ -58,13 +58,16 @@ export function SignupForm() {
       }
 
       const data = await response.json();
+      
+      if (!data.token) {
+        throw new Error('No token received from server');
+      }
+
       dispatch(setCredentials({
         message: data.message,
         token: data.token,
         user: data.user
       }));
-      console.log(data)
-      console.log(data.user)
       
       toast({
         title: "Success",
@@ -80,7 +83,18 @@ export function SignupForm() {
         description: errorMessage,
         variant: "destructive",
       })
+    } finally {
+      dispatch(setLoading(false))
     }
+  }
+
+  function handleLogout() {
+    dispatch(logout());
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
+    router.push("/");
   }
 
   return (
@@ -158,6 +172,9 @@ export function SignupForm() {
           </div>
           <Button type="submit" className="w-full uppercase" disabled={loading}>
             {loading ? "Creating account..." : "Create account"}
+          </Button>
+          <Button type="button" className="w-full mt-4 uppercase" onClick={handleLogout}>
+            Logout
           </Button>
         </CardContent>
       </Card>
