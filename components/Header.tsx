@@ -18,6 +18,8 @@ export function Header() {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated) 
   const dispatch = useDispatch()
   const router = useRouter()
+  const user = useSelector((state: RootState) => state.auth.user)
+  const userRole = user?.role // Assuming user has a role property
 
   useEffect(() => {
     // This will run whenever isAuthenticated changes
@@ -90,6 +92,25 @@ export function Header() {
           </div>
         
 
+          {/* Dashboard */}
+          {userRole === 'ADMIN' && (
+            <Link href="/dashboard/admin" className="hidden sm:flex items-center gap-1">
+              <Button variant="outline">Dashboard</Button>
+            </Link>
+          )}
+          {userRole === 'USER' && (
+            <Link href="/dashboard/user" className="hidden sm:flex items-center gap-1">
+              <Button variant="outline">Dashboard</Button>
+            </Link>
+          )}
+          {userRole === 'ADVERTISER' && (
+            <Link href="/dashboard/advertiser" className="hidden sm:flex items-center gap-1">
+              <Button variant="outline">Dashboard</Button>
+            </Link>
+          )}
+
+
+          {/* Notifications */}
           
 
           {/* Desktop Auth Buttons */}

@@ -3,10 +3,23 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { BarChart, FileText, Settings, LogOut, PlusCircle, CreditCard, Users } from "lucide-react"
+import { useSelector } from "react-redux"
+interface RootState {
+  auth: {
+    token: string;
+    user: {
+      id : string;
+      fullName: string;
+      email: string;
+      role: string;
+    } 
+  }
+}
 
 export function AdvertiserSidebar() {
   const pathname = usePathname()
-
+  const user = useSelector((state: RootState) => state.auth.user);
+  console.log(user)
   const menuItems = [
     { icon: FileText, label: "Campaigns", href: "/dashboard/advertiser" },
     { icon: BarChart, label: "Analytics", href: "/dashboard/advertiser/analytics" },
@@ -22,8 +35,8 @@ export function AdvertiserSidebar() {
             A
           </div>
           <div>
-            <div className="font-medium">Acme Inc.</div>
-            <div className="text-xs text-muted-foreground">Premium Advertiser</div>
+            <div className="font-medium Name">{user?.fullName || "Guest"}</div>
+            <div className="text-xs text-muted-foreground Gmail_Id">{user?.email || "user Email"}</div>
           </div>
         </div>
       </div>

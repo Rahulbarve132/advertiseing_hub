@@ -161,7 +161,7 @@ export default function AdvertiserDashboard() {
                       <Card key={index}>
                         <CardContent className="p-4">
                           <div className="text-sm font-medium text-muted-foreground">{stat.label}</div>
-                          <div className="text-2xl font-bold">{stat.value}</div>
+                          <div className="text-2xl font-bold">{stat.value }</div>
                           <div className="text-xs text-green-600">{stat.change}</div>
                         </CardContent>
                       </Card>
