@@ -1,9 +1,15 @@
+"use client"
 import Link from "next/link"
 import Image from "next/image"
 import { Coffee, Mail, Menu, Search, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { AdvertisementCarousel } from "@/components/advertisement-carousel"
+import './globals.css'
+import { stat } from "fs"
+import { useSelector } from "react-redux"
+import { RootState } from "@/redux/store"
+import { toast } from 'react-hot-toast'
 
 export default function Home() {
   const currentDate = new Date().toLocaleDateString("en-US", {
@@ -12,13 +18,19 @@ export default function Home() {
     month: "long",
     day: "numeric",
   })
+ 
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
+  const user = useSelector((state: RootState) => state.auth.user)
+  const userRole = user?.role 
+
+  
 
   return (
-    <div className="min-h-screen bg-[#f8f3e9] text-[#2b2b2b]">
+    <div className="min-h-screen bg-[#ffffff] text-[#2b2b2b]">
       {/* Breaking News Banner */}
-      <div className="bg-black text-white py-2 overflow-hidden">
+      <div className="secondary_bg text-white py-2 overflow-hidden">
         <div className="container flex items-center gap-4">
-          <span className="bg-red-600 text-white px-2 py-1 text-xs font-bold uppercase whitespace-nowrap">
+          <span className="primary_bg text-white px-2 py-2 text-xs font-bold uppercase whitespace-nowrap">
             Breaking News
           </span>
           <div className="overflow-hidden whitespace-nowrap w-full">
@@ -28,6 +40,43 @@ export default function Home() {
               <span className="mx-8">Limited-time offer: 20% off premium placements</span>
             </div>
           </div>
+
+
+          {!isAuthenticated ? (
+            <Link href="/signup" className="hidden md:flex items-center gap-1">
+              <div className="bg-black text-white px-2 py-2 text-xs font-bold uppercase whitespace-nowrap">
+                Post Free Ads
+              </div>
+            </Link>
+          ) : (
+            <>
+              {userRole === 'ADVERTISER' && (
+                <Link href='/dashboard/advertiser'>
+                  <div className="bg-black text-white px-2 py-2 text-xs font-bold uppercase whitespace-nowrap">
+                    Post Free Ads
+                  </div>
+                </Link>
+              )}
+
+{userRole === 'USER' && (
+          <div
+            className="bg-black hover:bg-black/80 text-white px-2 py-2 text-xs font-bold uppercase whitespace-nowrap cursor-pointer"
+            onClick={() => {
+              toast.error('Please upgrade your account to advertiser to post ads', {
+                duration: 3000,
+                position: 'top-center',
+              })
+            }}
+          >
+            Post Free Ads
+          </div>
+        )}
+
+
+
+            </>
+          )}
+
         </div>
       </div>
 
