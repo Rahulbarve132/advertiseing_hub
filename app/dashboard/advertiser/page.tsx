@@ -1,15 +1,103 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { PlusCircle } from "lucide-react"
-import { SiteHeader } from "@/components/site-header"
-import { AdvertiserSidebar } from "@/components/advertiser-sidebar"
+"use client";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PlusCircle } from "lucide-react";
+import { AdvertiserSidebar } from "@/components/advertiser-sidebar";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { toast } from "react-hot-toast";
+
+interface Analytics {
+  impressions: number;
+  clicks: number;
+  ctr: number;
+}
+
+interface Advertiser {
+  _id: string;
+  fullName: string;
+  companyName: string;
+}
+
+interface Campaign {
+  _id: string;
+  advertiser: Advertiser;
+  campaignName: string;
+  campaignType: "BANNER" | "FEATURED" | "INTERACTIVE";
+  headline: string;
+  body: string;
+  callToAction: string;
+  imageUrl: string;
+  status: "ACTIVE" | "PENDING" | "SCHEDULED";
+  analytics: Analytics;
+  createdAt?: string;
+  updatedAt?: string;
+  campaignDescription?: string;
+}
+
+// You can place this above your component or in a separate file
+function SkeletonRow() {
+  return (
+    <div className="grid grid-cols-4 p-4 border-b last:border-0 animate-pulse">
+      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+      <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+      <div className="flex gap-2">
+        <div className="h-8 w-12 bg-gray-200 rounded"></div>
+        <div className="h-8 w-12 bg-gray-200 rounded"></div>
+      </div>
+    </div>
+  );
+}
 
 export default function AdvertiserDashboard() {
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [loading, setLoading] = useState(true);
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  useEffect(() => {
+    const fetchCampaigns = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          "https://advertisemedia.onrender.com/api/campaigns"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch campaigns");
+        }
+        const data = await response.json();
+
+        // Filter campaigns where advertiser._id === user.id
+        const filteredCampaigns = (data.campaigns || data).filter(
+          (campaign: Campaign) =>
+            campaign.advertiser &&
+            (campaign.advertiser._id === user?.id ||
+              (typeof campaign.advertiser === "string" &&
+                campaign.advertiser === user?.id)) // handle both object and string cases
+        );
+
+        setCampaigns(filteredCampaigns);
+      } catch (error) {
+        console.error("Error fetching campaigns:", error);
+        toast.error("Failed to fetch campaigns. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCampaigns();
+  }, [user?.id]);
+
   return (
     <div className="flex min-h-screen flex-col">
-     
-
       <div className="flex-1 flex">
         <AdvertiserSidebar />
 
@@ -22,32 +110,89 @@ export default function AdvertiserDashboard() {
             </Button>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3 mb-6">
+          <div className="grid gap-6 md:grid-cols-4 mb-6">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Active Campaigns</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Active Campaigns
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">3</div>
-                <p className="text-xs text-muted-foreground">2 pending approval</p>
+                <div className="text-2xl font-bold">
+                  {
+                    campaigns.filter((campaign) => campaign.status === "ACTIVE")
+                      .length
+                  }
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {
+                    campaigns.filter(
+                      (campaign) => campaign.status === "PENDING"
+                    ).length
+                  }{" "}
+                  pending approval
+                </p>
               </CardContent>
             </Card>
+
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Impressions</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total Impressions
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">24,521</div>
-                <p className="text-xs text-muted-foreground">+12% from last week</p>
+                <div className="text-2xl font-bold">
+                  {campaigns
+                    .reduce(
+                      (sum, campaign) =>
+                        sum + (campaign.analytics?.impressions || 0),
+                      0
+                    )
+                    .toLocaleString()}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  +0% from last week
+                </p>
               </CardContent>
             </Card>
+
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Click-through Rate</CardTitle>
+                <CardTitle className="text-sm font-medium">Clicks</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">3.2%</div>
-                <p className="text-xs text-muted-foreground">Industry avg: 2.5%</p>
+                <div className="text-2xl font-bold">
+                  {campaigns
+                    .reduce(
+                      (sum, campaign) =>
+                        sum + (campaign.analytics?.clicks || 0),
+                      0
+                    )
+                    .toLocaleString()}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Industry avg: 2.5%
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium">CTR</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {campaigns
+                    .reduce(
+                      (sum, campaign) => sum + (campaign.analytics?.ctr || 0),
+                      0
+                    )
+                    .toLocaleString()}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Industry avg: 2.5%
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -63,78 +208,63 @@ export default function AdvertiserDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle>Your Advertising Campaigns</CardTitle>
-                  <CardDescription>Manage your active and scheduled advertising campaigns</CardDescription>
+                  <CardDescription>
+                    Manage your active and scheduled advertising campaigns
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="border rounded-md">
-                    <div className="grid grid-cols-5 p-4 font-medium border-b">
+                    <div className="grid grid-cols-4 p-4 font-medium border-b">
                       <div>Campaign Name</div>
                       <div>Type</div>
                       <div>Status</div>
-                      <div>Performance</div>
                       <div>Actions</div>
                     </div>
 
-                    {[
-                      { name: "Summer Sale Promotion", type: "Banner", status: "Active", performance: "High" },
-                      { name: "Product Launch", type: "Featured", status: "Scheduled", performance: "N/A" },
-                      { name: "Brand Awareness", type: "Interactive", status: "Pending Approval", performance: "N/A" },
-                    ].map((campaign, index) => (
-                      <div key={index} className="grid grid-cols-5 p-4 border-b last:border-0">
-                        <div>{campaign.name}</div>
-                        <div>{campaign.type}</div>
-                        <div>
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs ${
-                              campaign.status === "Active"
-                                ? "bg-green-100 text-green-800"
-                                : campaign.status === "Scheduled"
+                    {loading ? (
+                      // Show 4 shimmer rows while loading
+                      <>
+                        <SkeletonRow />
+                        <SkeletonRow />
+                        <SkeletonRow />
+                        <SkeletonRow />
+                      </>
+                    ) : campaigns.length === 0 ? (
+                      <div className="p-4 text-center text-muted-foreground">
+                        No campaigns found. Create your first campaign!
+                      </div>
+                    ) : (
+                      campaigns.map((campaign) => (
+                        <div
+                          key={campaign._id}
+                          className="grid grid-cols-4 p-4 border-b last:border-0"
+                        >
+                          <div>{campaign.campaignName}</div>
+                          <div>{campaign.campaignType}</div>
+                          <div>
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs ${
+                                campaign.status === "ACTIVE"
+                                  ? "bg-green-100 text-green-800"
+                                  : campaign.status === "SCHEDULED"
                                   ? "bg-blue-100 text-blue-800"
                                   : "bg-yellow-100 text-yellow-800"
-                            }`}
-                          >
-                            {campaign.status}
-                          </span>
+                              }`}
+                            >
+                              {campaign.status}
+                            </span>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button variant="outline" size="sm">
+                              Edit
+                            </Button>
+                            <Button variant="outline" size="sm">
+                              View
+                            </Button>
+                          </div>
                         </div>
-                        <div>{campaign.performance}</div>
-                        <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
-                            Edit
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            View
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Campaign Templates</CardTitle>
-                  <CardDescription>Start with a pre-designed template to create your next campaign</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {[
-                      { name: "Standard Banner", description: "Classic banner ads for website header and sidebar" },
-                      { name: "Featured Article", description: "Sponsored content that appears as a featured article" },
-                      { name: "Interactive Poll", description: "Engage readers with an interactive poll or quiz" },
-                    ].map((template, index) => (
-                      <Card key={index}>
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-md">{template.name}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-sm text-muted-foreground mb-4">{template.description}</p>
-                          <Button variant="outline" size="sm" className="w-full">
-                            Use Template
-                          </Button>
-                        </CardContent>
-                      </Card>
-                    ))}
+                      ))
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -144,7 +274,9 @@ export default function AdvertiserDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle>Campaign Performance</CardTitle>
-                  <CardDescription>View detailed analytics for your advertising campaigns</CardDescription>
+                  <CardDescription>
+                    View detailed analytics for your advertising campaigns
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="h-[300px] bg-muted rounded-md flex items-center justify-center text-muted-foreground">
@@ -160,9 +292,13 @@ export default function AdvertiserDashboard() {
                     ].map((stat, index) => (
                       <Card key={index}>
                         <CardContent className="p-4">
-                          <div className="text-sm font-medium text-muted-foreground">{stat.label}</div>
-                          <div className="text-2xl font-bold">{stat.value }</div>
-                          <div className="text-xs text-green-600">{stat.change}</div>
+                          <div className="text-sm font-medium text-muted-foreground">
+                            {stat.label}
+                          </div>
+                          <div className="text-2xl font-bold">{stat.value}</div>
+                          <div className="text-xs text-green-600">
+                            {stat.change}
+                          </div>
                         </CardContent>
                       </Card>
                     ))}
@@ -173,18 +309,24 @@ export default function AdvertiserDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle>Audience Demographics</CardTitle>
-                  <CardDescription>Understand who is engaging with your advertisements</CardDescription>
+                  <CardDescription>
+                    Understand who is engaging with your advertisements
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="text-sm font-medium mb-2">Age Distribution</h4>
+                      <h4 className="text-sm font-medium mb-2">
+                        Age Distribution
+                      </h4>
                       <div className="h-[200px] bg-muted rounded-md flex items-center justify-center text-muted-foreground">
                         Age Chart Placeholder
                       </div>
                     </div>
                     <div>
-                      <h4 className="text-sm font-medium mb-2">Geographic Distribution</h4>
+                      <h4 className="text-sm font-medium mb-2">
+                        Geographic Distribution
+                      </h4>
                       <div className="h-[200px] bg-muted rounded-md flex items-center justify-center text-muted-foreground">
                         Geography Chart Placeholder
                       </div>
@@ -198,14 +340,18 @@ export default function AdvertiserDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle>Billing Summary</CardTitle>
-                  <CardDescription>View and manage your billing information and invoices</CardDescription>
+                  <CardDescription>
+                    View and manage your billing information and invoices
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center p-4 border rounded-md">
                       <div>
                         <div className="font-medium">Current Plan</div>
-                        <div className="text-sm text-muted-foreground">Premium Advertiser</div>
+                        <div className="text-sm text-muted-foreground">
+                          Premium Advertiser
+                        </div>
                       </div>
                       <Button variant="outline">Upgrade Plan</Button>
                     </div>
@@ -219,11 +365,29 @@ export default function AdvertiserDashboard() {
                       </div>
 
                       {[
-                        { id: "INV-001", date: "Mar 15, 2023", amount: "$1,200.00", status: "Paid" },
-                        { id: "INV-002", date: "Apr 15, 2023", amount: "$1,200.00", status: "Paid" },
-                        { id: "INV-003", date: "May 15, 2023", amount: "$1,500.00", status: "Pending" },
+                        {
+                          id: "INV-001",
+                          date: "Mar 15, 2023",
+                          amount: "$1,200.00",
+                          status: "Paid",
+                        },
+                        {
+                          id: "INV-002",
+                          date: "Apr 15, 2023",
+                          amount: "$1,200.00",
+                          status: "Paid",
+                        },
+                        {
+                          id: "INV-003",
+                          date: "May 15, 2023",
+                          amount: "$1,500.00",
+                          status: "Pending",
+                        },
                       ].map((invoice, index) => (
-                        <div key={index} className="grid grid-cols-4 p-4 border-b last:border-0">
+                        <div
+                          key={index}
+                          className="grid grid-cols-4 p-4 border-b last:border-0"
+                        >
                           <div>{invoice.id}</div>
                           <div>{invoice.date}</div>
                           <div>{invoice.amount}</div>
@@ -248,7 +412,9 @@ export default function AdvertiserDashboard() {
                         <div className="w-10 h-6 bg-muted rounded mr-2"></div>
                         <div>
                           <div className="text-sm">Visa ending in 4242</div>
-                          <div className="text-xs text-muted-foreground">Expires 12/25</div>
+                          <div className="text-xs text-muted-foreground">
+                            Expires 12/25
+                          </div>
                         </div>
                         <Button variant="outline" size="sm" className="ml-auto">
                           Update
@@ -263,6 +429,5 @@ export default function AdvertiserDashboard() {
         </main>
       </div>
     </div>
-  )
+  );
 }
-

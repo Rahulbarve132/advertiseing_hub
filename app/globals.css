@@ -2,10 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-.primary_color { color: #0bf51f; }
+.primary_color { color: #12da23; }
 .primary_bg { background-color: #12da23; }
-.secondary_color { color: #1e63f7; }
-.secondary_bg { background-color: #1e63f7; }
+.secondary_color { color: #0033a2; }
+.secondary_bg { background-color: #0033a2; }
+.main_bg { background-color: #f8f5e9; }
 
 
 @layer base {

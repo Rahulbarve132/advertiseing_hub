@@ -26,7 +26,7 @@ export default function Home() {
   
 
   return (
-    <div className="min-h-screen bg-[#ffffff] text-[#2b2b2b]">
+    <div className="min-h-screen main_bg text-[#2b2b2b]">
       {/* Breaking News Banner */}
       <div className="secondary_bg text-white py-2 overflow-hidden">
         <div className="container flex items-center gap-4">
@@ -185,7 +185,7 @@ export default function Home() {
                 </p>
                 <div className="space-y-2">
                   <Input placeholder="Your Email Address" className="rounded-none border-black" />
-                  <Button className="w-full rounded-none">Subscribe Now</Button>
+                  <Button className="bg-black w-full rounded-none">Subscribe Now</Button>
                 </div>
               </div>
 
@@ -297,7 +297,7 @@ export default function Home() {
         </section>
 
         {/* Call to Action */}
-        <section className="my-12 bg-black text-white p-8 text-center">
+        <section className="my-12 secondary_bg text-white p-8 text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">
             Secure Your Premium Advertising Space Today
           </h2>
