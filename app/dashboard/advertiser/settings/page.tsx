@@ -1,16 +1,110 @@
-import { AdvertiserSidebar } from "@/components/advertiser-sidebar"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from "@/components/ui/textarea"
+"use client";
+import { AdvertiserSidebar } from "@/components/advertiser-sidebar";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/redux/store";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
+import { setUser } from "@/redux/features/authSlice";
+
+interface FormState {
+  fullName?: string;
+  email?: string;
+}
 
 export default function AdvertiserSettingsPage() {
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const token = useSelector((state: RootState) => state.auth.token);
+  const [loading, setLoading] = useState(false);
+
+  const [formData, setFormData] = useState<FormState>({
+    fullName: user?.fullName || "",
+    email: user?.email || "",
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if (!user) {
+      toast.error("User not found");
+      setLoading(false);
+      return;
+    }
+
+    // Check which fields have changed
+    const changedFields = Object.entries(formData).reduce(
+      (acc, [key, value]) => {
+        if (value !== user[key as keyof typeof user]) {
+          acc[key as keyof FormState] = value;
+        }
+        return acc;
+      },
+      {} as Partial<FormState>
+    );
+
+    // If no fields changed, return early
+    if (Object.keys(changedFields).length === 0) {
+      toast.error("No changes detected");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://advertisemedia.onrender.com/api/users/${user.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(changedFields),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update profile");
+      }
+
+      // Update Redux store with new user data
+      dispatch(
+        setUser({
+          ...user,
+          ...changedFields,
+        })
+      );
+
+      toast.success("Profile updated successfully!");
+    } catch (error) {
+      console.error("Update error:", error);
+      toast.error("Failed to update profile");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
-     
       <div className="flex-1 flex">
         <AdvertiserSidebar />
 
@@ -20,8 +114,6 @@ export default function AdvertiserSettingsPage() {
           <Tabs defaultValue="profile" className="space-y-4">
             <TabsList>
               <TabsTrigger value="profile">Profile</TabsTrigger>
-              <TabsTrigger value="company">Company</TabsTrigger>
-              <TabsTrigger value="notifications">Notifications</TabsTrigger>
               <TabsTrigger value="security">Security</TabsTrigger>
             </TabsList>
 
@@ -29,37 +121,34 @@ export default function AdvertiserSettingsPage() {
               <Card>
                 <CardHeader>
                   <CardTitle>Personal Information</CardTitle>
-                  <CardDescription>Update your personal information</CardDescription>
+                  <CardDescription>
+                    Update your personal information
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <form className="space-y-4">
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <div className="space-y-2">
-                        <Label htmlFor="first-name">First Name</Label>
-                        <Input id="first-name" defaultValue="John" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="last-name">Last Name</Label>
-                        <Input id="last-name" defaultValue="Smith" />
-                      </div>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="first-name">Full Name</Label>
+                      <Input
+                        id="fullName"
+                        name="fullName"
+                        value={formData.fullName}
+                        onChange={handleInputChange}
+                      />
                     </div>
-
                     <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" defaultValue="john.smith@acme.com" />
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                      />
                     </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number</Label>
-                      <Input id="phone" type="tel" defaultValue="(555) 123-4567" />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="job-title">Job Title</Label>
-                      <Input id="job-title" defaultValue="Marketing Director" />
-                    </div>
-
-                    <Button>Save Changes</Button>
+                    <Button type="submit" disabled={loading}>
+                      {loading ? "Saving..." : "Save Changes"}
+                    </Button>
                   </form>
                 </CardContent>
               </Card>
@@ -85,182 +174,13 @@ export default function AdvertiserSettingsPage() {
               </Card>
             </TabsContent>
 
-            <TabsContent value="company" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Company Information</CardTitle>
-                  <CardDescription>Update your company details</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="company-name">Company Name</Label>
-                      <Input id="company-name" defaultValue="Acme Inc." />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="company-website">Website</Label>
-                      <Input id="company-website" type="url" defaultValue="https://acme.com" />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="company-description">Company Description</Label>
-                      <Textarea
-                        id="company-description"
-                        rows={4}
-                        defaultValue="Acme Inc. is a leading provider of innovative solutions for businesses of all sizes."
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="industry">Industry</Label>
-                      <Input id="industry" defaultValue="Technology" />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="company-size">Company Size</Label>
-                      <Input id="company-size" defaultValue="50-100 employees" />
-                    </div>
-
-                    <Button>Save Changes</Button>
-                  </form>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Company Logo</CardTitle>
-                  <CardDescription>Update your company logo</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-6">
-                    <div className="w-24 h-24 bg-muted rounded-md flex items-center justify-center text-muted-foreground">
-                      Logo
-                    </div>
-                    <div className="space-y-2">
-                      <Button variant="outline">Upload New Logo</Button>
-                      <p className="text-xs text-muted-foreground">
-                        Recommended: Square image, at least 400x400 pixels.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="notifications" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Email Notifications</CardTitle>
-                  <CardDescription>Manage your email notification preferences</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {[
-                      {
-                        id: "campaign-updates",
-                        label: "Campaign Updates",
-                        description: "Receive updates about your campaign performance",
-                      },
-                      {
-                        id: "billing-alerts",
-                        label: "Billing Alerts",
-                        description: "Receive notifications about billing and payments",
-                      },
-                      {
-                        id: "new-features",
-                        label: "New Features",
-                        description: "Get notified about new advertising features and opportunities",
-                      },
-                      {
-                        id: "tips-guides",
-                        label: "Tips & Guides",
-                        description: "Receive tips and guides to optimize your advertising",
-                      },
-                      {
-                        id: "newsletter",
-                        label: "Newsletter",
-                        description: "Receive our monthly newsletter with industry insights",
-                      },
-                    ].map((notification) => (
-                      <div key={notification.id} className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium">{notification.label}</div>
-                          <div className="text-sm text-muted-foreground">{notification.description}</div>
-                        </div>
-                        <Switch defaultChecked={notification.id !== "newsletter"} />
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Notification Frequency</CardTitle>
-                  <CardDescription>Control how often you receive notifications</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label>Campaign Performance Reports</Label>
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <input type="radio" id="daily" name="frequency" className="h-4 w-4" />
-                          <Label htmlFor="daily" className="font-normal">
-                            Daily
-                          </Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <input type="radio" id="weekly" name="frequency" className="h-4 w-4" defaultChecked />
-                          <Label htmlFor="weekly" className="font-normal">
-                            Weekly
-                          </Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <input type="radio" id="monthly" name="frequency" className="h-4 w-4" />
-                          <Label htmlFor="monthly" className="font-normal">
-                            Monthly
-                          </Label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label>Alert Threshold</Label>
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <input type="radio" id="all" name="threshold" className="h-4 w-4" />
-                          <Label htmlFor="all" className="font-normal">
-                            All Changes
-                          </Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <input type="radio" id="significant" name="threshold" className="h-4 w-4" defaultChecked />
-                          <Label htmlFor="significant" className="font-normal">
-                            Significant Changes
-                          </Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <input type="radio" id="critical" name="threshold" className="h-4 w-4" />
-                          <Label htmlFor="critical" className="font-normal">
-                            Critical Only
-                          </Label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <Button>Save Preferences</Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
             <TabsContent value="security" className="space-y-4">
               <Card>
                 <CardHeader>
                   <CardTitle>Change Password</CardTitle>
-                  <CardDescription>Update your account password</CardDescription>
+                  <CardDescription>
+                    Update your account password
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <form className="space-y-4">
@@ -275,7 +195,9 @@ export default function AdvertiserSettingsPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="confirm-password">Confirm New Password</Label>
+                      <Label htmlFor="confirm-password">
+                        Confirm New Password
+                      </Label>
                       <Input id="confirm-password" type="password" />
                     </div>
 
@@ -283,74 +205,10 @@ export default function AdvertiserSettingsPage() {
                   </form>
                 </CardContent>
               </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Two-Factor Authentication</CardTitle>
-                  <CardDescription>Add an extra layer of security to your account</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-medium">Two-Factor Authentication</div>
-                        <div className="text-sm text-muted-foreground">
-                          Protect your account with an additional security layer
-                        </div>
-                      </div>
-                      <Switch />
-                    </div>
-
-                    <div className="p-4 border rounded-md bg-muted/50">
-                      <p className="text-sm text-muted-foreground">
-                        Two-factor authentication adds an extra layer of security to your account by requiring more than
-                        just a password to sign in.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Session Management</CardTitle>
-                  <CardDescription>Manage your active sessions</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {[
-                      { device: "Chrome on Windows", location: "New York, USA", lastActive: "Active now" },
-                      { device: "Safari on iPhone", location: "New York, USA", lastActive: "2 hours ago" },
-                      { device: "Firefox on MacOS", location: "Boston, USA", lastActive: "3 days ago" },
-                    ].map((session, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 border rounded-md">
-                        <div>
-                          <div className="font-medium">{session.device}</div>
-                          <div className="text-sm text-muted-foreground">
-                            {session.location} • {session.lastActive}
-                          </div>
-                        </div>
-                        {index === 0 ? (
-                          <div className="text-sm text-green-600 font-medium">Current Session</div>
-                        ) : (
-                          <Button variant="outline" size="sm">
-                            Sign Out
-                          </Button>
-                        )}
-                      </div>
-                    ))}
-
-                    <Button variant="outline" className="w-full">
-                      Sign Out of All Sessions
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
             </TabsContent>
           </Tabs>
         </main>
       </div>
     </div>
-  )
+  );
 }
-
