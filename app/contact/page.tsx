@@ -1,3 +1,4 @@
+'use client'
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -5,13 +6,16 @@ import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { NewspaperHeader } from "@/components/newspaper-header"
 import { Mail, Phone, MapPin, Clock } from "lucide-react"
+import BreakingNewsBanner from "@/components/BreakingNewsBanner"
+import '@/app/globals.css'
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-[#f8f3e9] text-[#2b2b2b]">
-      <NewspaperHeader />
+    <div className="min-h-screen main_bg">
+      
+  <BreakingNewsBanner/>
+      
 
       <main className="container py-8">
         {/* Page Title */}
@@ -59,7 +63,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-serif font-bold">Address</h3>
-                    <p className="font-serif">The Advertiseing Hub</p>
+                    <p className="font-serif">VDoAds</p>
                     <p className="font-serif">1234 Newspaper Row</p>
                     <p className="font-serif">New York, NY 10001</p>
                   </div>
@@ -78,7 +82,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="border border-black p-8 bg-[#f0e6d2]">
+            <div className="border primary_bg border-black p-8 ">
               <h2 className="font-serif text-2xl font-bold mb-6">Meet Our Team</h2>
 
               <div className="space-y-6">
@@ -216,7 +220,7 @@ export default function ContactPage() {
                 <div className="flex items-start space-x-2">
                   <input type="checkbox" id="newsletter" className="mt-1" />
                   <Label htmlFor="newsletter" className="font-serif text-sm">
-                    I would like to receive The Advertiseing Hub's advertising newsletter with updates on new
+                    I would like to receive VDoAds's advertising newsletter with updates on new
                     opportunities and case studies.
                   </Label>
                 </div>
@@ -290,18 +294,16 @@ export default function ContactPage() {
         </section>
 
         {/* Call to Action */}
-        <section className="bg-black text-white p-8 text-center">
+        <section className="secondary_bg text-white p-8 text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="font-serif text-lg mb-6 max-w-2xl mx-auto">
-            Contact our advertising team today to discuss how The Advertiseing Hub can showcase your brand in a premium
+            Contact our advertising team today to discuss how VDoAds can showcase your brand in a premium
             environment.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-white text-black hover:bg-white/90 rounded-none text-lg px-8">
-              <Link href="/media-kit">Download Media Kit</Link>
-            </Button>
-            <Button variant="outline" className="text-black hover:text-white border-white hover:bg-white/10 rounded-none text-lg px-8">
-              <Link href="/advertise">View Advertising Options</Link>
+            
+            <Button variant="outline" className="text-black hover:text-white border-white bg-white rounded-none text-lg px-8">
+              <Link href="/advertise">Contect Our Team</Link>
             </Button>
           </div>
         </section>

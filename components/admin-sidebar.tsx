@@ -26,7 +26,7 @@ export function AdminSidebar() {
           </div>
           <div>
             <div className="font-medium">Admin Portal</div>
-            <div className="text-xs text-muted-foreground">The Advertiseing Hub</div>
+            <div className="text-xs text-muted-foreground">VDoAds</div>
           </div>
         </div>
       </div>

@@ -6,10 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { AdvertisementCarousel } from "@/components/advertisement-carousel"
 import './globals.css'
-import { stat } from "fs"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
-import { toast } from 'react-hot-toast'
+import BreakingNewsBanner from "@/components/BreakingNewsBanner"
 
 export default function Home() {
   const currentDate = new Date().toLocaleDateString("en-US", {
@@ -26,59 +25,10 @@ export default function Home() {
   
 
   return (
-    <div className="min-h-screen main_bg text-[#2b2b2b]">
-      {/* Breaking News Banner */}
-      <div className="secondary_bg text-white py-2 overflow-hidden">
-        <div className="container flex items-center gap-4">
-          <span className="primary_bg text-white px-2 py-2 text-xs font-bold uppercase whitespace-nowrap">
-            Breaking News
-          </span>
-          <div className="overflow-hidden whitespace-nowrap w-full">
-            <div className="inline-block animate-marquee font-serif">
-              <span className="mx-8">Premium advertising spaces now available for Q2</span>
-              <span className="mx-8">New interactive ad formats launching next month</span>
-              <span className="mx-8">Limited-time offer: 20% off premium placements</span>
-            </div>
-          </div>
-
-
-          {!isAuthenticated ? (
-            <Link href="/signup" className="hidden md:flex items-center gap-1">
-              <div className="bg-black text-white px-2 py-2 text-xs font-bold uppercase whitespace-nowrap">
-                Post Free Ads
-              </div>
-            </Link>
-          ) : (
-            <>
-              {userRole === 'ADVERTISER' && (
-                <Link href='/dashboard/advertiser'>
-                  <div className="bg-black text-white px-2 py-2 text-xs font-bold uppercase whitespace-nowrap">
-                    Post Free Ads
-                  </div>
-                </Link>
-              )}
-
-{userRole === 'USER' && (
-          <div
-            className="bg-black hover:bg-black/80 text-white px-2 py-2 text-xs font-bold uppercase whitespace-nowrap cursor-pointer"
-            onClick={() => {
-              toast.error('Please upgrade your account to advertiser to post ads', {
-                duration: 3000,
-                position: 'top-center',
-              })
-            }}
-          >
-            Post Free Ads
-          </div>
-        )}
-
-
-
-            </>
-          )}
-
-        </div>
-      </div>
+    <div className="min-h-screen main_bg ">
+      {/* Header */}
+      <BreakingNewsBanner/>
+    
 
       {/* Main Content */}
       <main className="container py-8">
@@ -113,20 +63,20 @@ export default function Home() {
               </div>
 
               <p className="font-serif text-lg leading-relaxed first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-2">
-                In an age of digital saturation, The Advertiseing Hub offers a refreshing return to the golden era of
-                advertising. Our premium newspaper-themed platform combines the timeless elegance of traditional print
+                In an age of digital saturation, VDoAds offers a refreshing return to the golden era of
+                advertising. Our premium platform combines the timeless elegance of traditional print
                 with cutting-edge digital capabilities, creating an unparalleled advertising experience for discerning
                 brands.
               </p>
 
               <p className="font-serif text-lg leading-relaxed">
-                "The attention to detail and the unique aesthetic of The Advertiseing Hub creates an environment where
+                "The attention to detail and the unique aesthetic of VDoAds creates an environment where
                 advertisements don't just compete for attention—they command it," says Marketing Director Elizabeth
                 Harlow. "Our clients report engagement rates far exceeding industry standards."
               </p>
 
-              <div className="bg-[#f0e6d2] border border-black p-6 my-8">
-                <h3 className="font-serif text-2xl font-bold mb-4 text-center">Premium Advertising Packages</h3>
+              <div className="primary_bg border  border-black p-6 my-8">
+                <h3 className="font-serif text-2xl font-bold mb-4 text-center text-black">Premium Advertising Packages</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="border border-black bg-white p-4 text-center hover:shadow-xl transition-shadow">
                     <h4 className="font-serif text-xl font-bold">Front Page</h4>
@@ -147,7 +97,7 @@ export default function Home() {
               </div>
 
               <p className="font-serif text-lg leading-relaxed">
-                With a dedicated team of design specialists, The Advertiseing Hub works closely with advertisers to
+                With a dedicated team of design specialists, VDoAds works closely with advertisers to
                 ensure each placement not only captures attention but resonates with our sophisticated audience. The
                 result is advertising that feels less like an interruption and more like a natural extension of the
                 reading experience.
@@ -159,8 +109,8 @@ export default function Home() {
           <div className="md:col-span-4">
             <div className="space-y-8">
               {/* Ad Space Showcase */}
-              <div className="border border-black p-4 bg-[#f0e6d2]">
-                <h3 className="font-serif text-xl font-bold text-center border-b border-black pb-2 mb-4">
+              <div className="border border-black p-4 primary_bg">
+                <h3 className="font-serif text-xl text-black font-bold text-center border-b border-black pb-2 mb-4">
                   Featured Advertisement
                 </h3>
                 <div className="relative aspect-[4/5] overflow-hidden border border-black mb-4">
@@ -224,7 +174,7 @@ export default function Home() {
               </div>
 
               {/* Coffee Break */}
-              <div className="border border-black p-4 bg-[#f0e6d2] text-center">
+              <div className="border border-black p-4 primary_bg text-black text-center">
                 <Coffee className="h-8 w-8 mx-auto mb-2" />
                 <h3 className="font-serif text-lg font-bold">Coffee Break</h3>
                 <p className="font-serif text-sm italic">
@@ -265,7 +215,7 @@ export default function Home() {
             </div>
             <div className="border border-black p-6 bg-white hover:shadow-xl transition-shadow">
               <p className="font-serif text-lg italic mb-4">
-                "Our campaign in The Advertiseing Hub delivered a 300% increase in brand recognition among our target
+                "Our campaign in VDoAds delivered a 300% increase in brand recognition among our target
                 demographic."
               </p>
               <div className="flex items-center gap-2">
@@ -306,11 +256,9 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button className="bg-white text-black hover:border-white hover:text-white hover:bg-white/10 rounded-none text-lg px-8">
-              Request Media Kit
+             Contact Sales Team
             </Button>
-            <Button variant="outline" className="text-black border-white hover:text-white hover:bg-white/10 rounded-none text-lg px-8">
-              Contact Sales Team
-            </Button>
+            
           </div>
         </section>
       </main>

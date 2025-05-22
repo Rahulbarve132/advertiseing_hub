@@ -3,17 +3,15 @@
 @tailwind utilities;
 
 .primary_color { color: #12da23; }
-.primary_bg { background-color: #12da23; }
+.primary_bg { background-color: #88ff92; }
 .secondary_color { color: #0033a2; }
 .secondary_bg { background-color: #0033a2; }
-.main_bg { background-color: #f8f5e9; }
+.main_bg { background-color: #ffffff; }
 
 
 @layer base {
   :root {
-    --background: 36 33% 97%;
-    --foreground: 20 14.3% 4.1%;
-
+    
     --card: 0 0% 100%;
     --card-foreground: 20 14.3% 4.1%;
 

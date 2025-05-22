@@ -40,12 +40,12 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-[#f8f5e9] shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b bg-white  shadow-xl">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo - visible on all screens */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
-            <span className="text-2xl font-serif font-bold text-gray-900">The Advertiseing Hub</span>
+            <span className="text-2xl font-serif font-bold text-black">VDoAds</span>
           </Link>
         </div>
 

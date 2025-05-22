@@ -1,13 +1,15 @@
+'use client'
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { NewspaperHeader } from "@/components/newspaper-header"
+import BreakingNewsBanner from "@/components/BreakingNewsBanner"
+import '@/app/globals.css'
 
 export default function GalleryPage() {
   return (
-    <div className="min-h-screen bg-[#f8f3e9] text-[#2b2b2b]">
-      <NewspaperHeader />
+    <div className="min-h-screen main_bg">
+    <BreakingNewsBanner/>
 
       <main className="container py-8">
         {/* Page Title */}
@@ -19,7 +21,7 @@ export default function GalleryPage() {
         {/* Introduction */}
         <div className="max-w-3xl mx-auto mb-12">
           <p className="font-serif text-lg leading-relaxed first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-2">
-            The Advertiseing Hub has had the privilege of showcasing exceptional advertisements from distinguished brands
+            VDoAds has had the privilege of showcasing exceptional advertisements from distinguished brands
             across various industries. Our gallery features a selection of these advertisements, demonstrating the
             unique aesthetic and impact that our newspaper-themed environment provides.
           </p>
@@ -246,7 +248,7 @@ export default function GalleryPage() {
         </section>
 
         {/* Call to Action */}
-        <section className="bg-black text-white p-8 text-center">
+        <section className="secondary_bg text-white p-8 text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">Create Your Own Masterpiece</h2>
           <p className="font-serif text-lg mb-6 max-w-2xl mx-auto">
             Join the distinguished brands featured in our gallery and create an advertisement that captivates and
@@ -256,9 +258,7 @@ export default function GalleryPage() {
             <Button className="bg-white text-black hover:bg-white/90 rounded-none text-lg px-8">
               <Link href="/contact">Contact Our Design Team</Link>
             </Button>
-            <Button variant="outline" className="text-black hover:text-white border-white hover:bg-white/10 rounded-none text-lg px-8">
-              <Link href="/advertise">View Advertising Options</Link>
-            </Button>
+            
           </div>
         </section>
       </main>

@@ -1,14 +1,17 @@
+'use client'
+
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { NewspaperHeader } from "@/components/newspaper-header"
+import "@/app/globals.css"
+import BreakingNewsBanner from "@/components/BreakingNewsBanner"
 
 export default function AdvertisePage() {
   return (
-    <div className="min-h-screen bg-[#f8f3e9] text-[#2b2b2b]"> 
-      <NewspaperHeader/>
+    <div className="min-h-screen main_bg "> 
+      <BreakingNewsBanner/>
       <main className="container py-8">
         {/* Page Title */}
         <div className="border-b-2 border-black mb-8 pb-4">
@@ -19,8 +22,8 @@ export default function AdvertisePage() {
         {/* Introduction */}
         <div className="max-w-3xl mx-auto mb-12">
           <p className="font-serif text-lg leading-relaxed first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-2">
-            The Advertiseing Hub offers a unique advertising platform that combines the timeless elegance of traditional
-            print with cutting-edge digital capabilities. Our newspaper-themed environment creates a distinctive context
+            VDoAds offers a unique advertising platform that combines the timeless elegance of traditional
+            print with cutting-edge digital capabilities. Our environment creates a distinctive context
             for your brand, allowing your message to stand out in an increasingly crowded digital landscape.
           </p>
           <p className="font-serif text-lg leading-relaxed mt-4">
@@ -194,51 +197,11 @@ export default function AdvertisePage() {
         </section>
 
         {/* Audience Information */}
-        <section className="mb-16 border border-black p-8 bg-[#f0e6d2]">
+        <section className="mb-16 border border-black p-8 primary_bg">
           <h2 className="font-serif text-3xl font-bold text-center mb-8">Our Distinguished Audience</h2>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border border-black rounded-none p-6 bg-white hover:shadow-xl transition-shadow">
-              <div className="text-center mb-4">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-black text-white mb-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="32"
-                    height="32"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                  </svg>
-                </div>
-                <h3 className="font-serif text-xl font-bold">Demographics</h3>
-              </div>
-              <ul className="font-serif space-y-2">
-                <li className="flex justify-between">
-                  <span>Age 25-45:</span>
-                  <span className="font-bold">68%</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Higher Education:</span>
-                  <span className="font-bold">82%</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Household Income $100k+:</span>
-                  <span className="font-bold">74%</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Urban/Suburban:</span>
-                  <span className="font-bold">91%</span>
-                </li>
-              </ul>
-            </Card>
+          <div className="grid md:grid-cols-2 gap-8">
+           
 
             <Card className="border border-black rounded-none p-6 bg-white hover:shadow-xl transition-shadow">
               <div className="text-center mb-4">
@@ -326,19 +289,17 @@ export default function AdvertisePage() {
         </section>
 
         {/* Call to Action */}
-        <section className="bg-black text-white p-8 text-center">
+        <section className="secondary_bg text-white p-8 text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">Ready to Elevate Your Brand?</h2>
           <p className="font-serif text-lg mb-6 max-w-2xl mx-auto">
-            Contact our advertising team today to discuss how The Advertiseing Hub can showcase your brand in a premium
+            Contact our advertising team today to discuss how VDoAds can showcase your brand in a premium
             environment.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button className="bg-white text-black hover:bg-white/90 rounded-none text-lg px-8">
               <Link href="/contact">Contact Sales Team</Link>
             </Button>
-            <Button variant="outline" className="text-black hover:text-white border-white hover:bg-white/10 rounded-none text-lg px-8">
-              <Link href="/media-kit">Download Media Kit</Link>
-            </Button>
+            
           </div>
         </section>
       </main>

@@ -1,13 +1,15 @@
+"use client"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { NewspaperHeader } from "@/components/newspaper-header"
+import BreakingNewsBanner from "@/components/BreakingNewsBanner"
 
 export default function CaseStudiesPage() {
   return (
-    <div className="min-h-screen bg-[#f8f3e9] text-[#2b2b2b]">
-      <NewspaperHeader />
+    <div className="min-h-screen main_bg">
+      <BreakingNewsBanner/>
 
       <main className="container py-8">
         {/* Page Title */}
@@ -19,7 +21,7 @@ export default function CaseStudiesPage() {
         {/* Introduction */}
         <div className="max-w-3xl mx-auto mb-12">
           <p className="font-serif text-lg leading-relaxed first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-2">
-            The true measure of an advertising platform lies in the results it delivers. At The Advertiseing Hub, we take
+            The true measure of an advertising platform lies in the results it delivers. At VDoAds, we take
             pride in the success our clients achieve through our premium newspaper-themed environment. These case
             studies showcase real campaigns and the measurable impact they've had for brands across various industries.
           </p>
@@ -122,7 +124,7 @@ export default function CaseStudiesPage() {
                 </div>
               </div>
 
-              <div className="border border-black p-4 bg-[#f0e6d2]">
+              <div className="border border-black p-4 primary_bg">
                 <h3 className="font-serif text-xl font-bold mb-2">Campaign Highlights</h3>
                 <ul className="font-serif space-y-2">
                   <li className="flex items-start">
@@ -182,9 +184,7 @@ export default function CaseStudiesPage() {
                     <span className="font-bold">+120%</span>
                   </div>
                 </div>
-                <Button className="w-full rounded-none mt-4">
-                  <Link href="/case-studies/vintage-apparel">Read Full Case Study</Link>
-                </Button>
+                
               </div>
             </Card>
 
@@ -222,9 +222,7 @@ export default function CaseStudiesPage() {
                     <span className="font-bold">Premium</span>
                   </div>
                 </div>
-                <Button className="w-full rounded-none mt-4">
-                  <Link href="/case-studies/artisanal-spirits">Read Full Case Study</Link>
-                </Button>
+               
               </div>
             </Card>
 
@@ -262,129 +260,26 @@ export default function CaseStudiesPage() {
                     <span className="font-bold">+32%</span>
                   </div>
                 </div>
-                <Button className="w-full rounded-none mt-4">
-                  <Link href="/case-studies/heritage-hotels">Read Full Case Study</Link>
-                </Button>
+                
               </div>
             </Card>
           </div>
         </section>
 
-        {/* Industry Breakdown */}
-        <section className="mb-16 border border-black p-8 bg-[#f0e6d2]">
-          <h2 className="font-serif text-3xl font-bold text-center mb-8">Success Across Industries</h2>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-6">
-              <div className="border border-black p-4 bg-white hover:shadow-xl transition-shadow">
-                <h3 className="font-serif text-xl font-bold mb-2">Luxury & Fashion</h3>
-                <p className="font-serif">
-                  Our premium aesthetic creates the perfect environment for luxury brands to showcase their products.
-                  Fashion and luxury advertisers consistently report higher engagement and conversion rates compared to
-                  traditional digital platforms.
-                </p>
-                <div className="mt-4 h-2 bg-gray-200">
-                  <div className="h-2 bg-black" style={{ width: "92%" }}></div>
-                </div>
-                <div className="flex justify-between text-sm mt-1">
-                  <span className="font-serif">Average ROI</span>
-                  <span className="font-serif font-bold">92%</span>
-                </div>
-              </div>
-
-              <div className="border border-black p-4 bg-white hover:shadow-xl transition-shadow">
-                <h3 className="font-serif text-xl font-bold mb-2">Food & Beverage</h3>
-                <p className="font-serif">
-                  Artisanal food producers and craft beverage companies find our platform particularly effective for
-                  communicating their commitment to tradition and quality, resulting in increased market presence.
-                </p>
-                <div className="mt-4 h-2 bg-gray-200">
-                  <div className="h-2 bg-black" style={{ width: "87%" }}></div>
-                </div>
-                <div className="flex justify-between text-sm mt-1">
-                  <span className="font-serif">Average ROI</span>
-                  <span className="font-serif font-bold">87%</span>
-                </div>
-              </div>
-
-              <div className="border border-black p-4 bg-white hover:shadow-xl transition-shadow">
-                <h3 className="font-serif text-xl font-bold mb-2">Travel & Hospitality</h3>
-                <p className="font-serif">
-                  Hotels, resorts, and travel experiences that emphasize heritage and unique experiences see exceptional
-                  results through our platform, particularly with our affluent, travel-oriented audience.
-                </p>
-                <div className="mt-4 h-2 bg-gray-200">
-                  <div className="h-2 bg-black" style={{ width: "85%" }}></div>
-                </div>
-                <div className="flex justify-between text-sm mt-1">
-                  <span className="font-serif">Average ROI</span>
-                  <span className="font-serif font-bold">85%</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              <div className="border border-black p-4 bg-white hover:shadow-xl transition-shadow">
-                <h3 className="font-serif text-xl font-bold mb-2">Arts & Culture</h3>
-                <p className="font-serif">
-                  Galleries, museums, and cultural events benefit from our highly engaged audience with strong interests
-                  in arts and culture, resulting in increased attendance and participation.
-                </p>
-                <div className="mt-4 h-2 bg-gray-200">
-                  <div className="h-2 bg-black" style={{ width: "94%" }}></div>
-                </div>
-                <div className="flex justify-between text-sm mt-1">
-                  <span className="font-serif">Average ROI</span>
-                  <span className="font-serif font-bold">94%</span>
-                </div>
-              </div>
-
-              <div className="border border-black p-4 bg-white hover:shadow-xl transition-shadow">
-                <h3 className="font-serif text-xl font-bold mb-2">Home & Design</h3>
-                <p className="font-serif">
-                  Interior designers, furniture makers, and home goods brands leverage our platform to showcase their
-                  aesthetic and craftsmanship to an audience that values quality and design.
-                </p>
-                <div className="mt-4 h-2 bg-gray-200">
-                  <div className="h-2 bg-black" style={{ width: "83%" }}></div>
-                </div>
-                <div className="flex justify-between text-sm mt-1">
-                  <span className="font-serif">Average ROI</span>
-                  <span className="font-serif font-bold">83%</span>
-                </div>
-              </div>
-
-              <div className="border border-black p-4 bg-white hover:shadow-xl transition-shadow">
-                <h3 className="font-serif text-xl font-bold mb-2">Financial Services</h3>
-                <p className="font-serif">
-                  Wealth management firms and premium financial services connect with our affluent audience through
-                  sophisticated messaging that emphasizes heritage and stability.
-                </p>
-                <div className="mt-4 h-2 bg-gray-200">
-                  <div className="h-2 bg-black" style={{ width: "79%" }}></div>
-                </div>
-                <div className="flex justify-between text-sm mt-1">
-                  <span className="font-serif">Average ROI</span>
-                  <span className="font-serif font-bold">79%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        
+       
 
         {/* Call to Action */}
-        <section className="bg-black text-white p-8 text-center">
+        <section className="secondary_bg text-white p-8 text-center">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">Ready to Write Your Success Story?</h2>
           <p className="font-serif text-lg mb-6 max-w-2xl mx-auto">
-            Join our distinguished advertisers and experience the exceptional results that The Advertiseing Hub delivers.
+            Join our distinguished advertisers and experience the exceptional results that VDoAds delivers.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button className="bg-white text-black hover:bg-white/90 rounded-none text-lg px-8">
               <Link href="/contact">Contact Sales Team</Link>
             </Button>
-            <Button variant="outline" className="text-black hover:text-white border-white hover:bg-white/10 rounded-none text-lg px-8">
-              <Link href="/advertise">View Advertising Options</Link>
-            </Button>
+           
           </div>
         </section>
       </main>

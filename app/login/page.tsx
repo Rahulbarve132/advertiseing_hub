@@ -26,7 +26,7 @@ export default function LoginPage() {
 
       <footer className="border-t py-6">
         <div className="container text-center text-sm">
-          <p>© {new Date().getFullYear()} The Advertiseing Hub. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} VDoAds. All rights reserved.</p>
         </div>
       </footer>
     </div>
