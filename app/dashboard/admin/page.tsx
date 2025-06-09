@@ -222,8 +222,8 @@ export default function AdminDashboard() {
     console.log(campaignId, currentStatus);
     try {
       const newStatus = currentStatus === 'PENDING' ? 'ACTIVE' : 'PENDING';
-      const response = await fetch(`https://advertisemedia.onrender.com/api/campaigns/${campaignId}`, {
-        method: 'PATCH',
+      const response = await fetch(`https://advertisemedia.onrender.com/api/campaigns/${campaignId}/status`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           authorization: `Bearer ${token}`,

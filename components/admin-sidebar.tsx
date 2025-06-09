@@ -9,11 +9,6 @@ export function AdminSidebar() {
 
   const menuItems = [
     { icon: ShieldCheck, label: "Dashboard", href: "/dashboard/admin" },
-    { icon: Users, label: "Users", href: "/dashboard/admin/users" },
-    { icon: FileText, label: "Campaigns", href: "/dashboard/admin/campaigns" },
-    { icon: BarChart, label: "Analytics", href: "/dashboard/admin/analytics" },
-    { icon: CreditCard, label: "Billing", href: "/dashboard/admin/billing" },
-    { icon: Bell, label: "Notifications", href: "/dashboard/admin/notifications" },
     { icon: Settings, label: "Settings", href: "/dashboard/admin/settings" },
   ]
 

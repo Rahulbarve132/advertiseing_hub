@@ -4,20 +4,34 @@ import Image from "next/image"
 import { Coffee, Mail, Menu, Search, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Skeleton } from "@/components/ui/skeleton"
 import { AdvertisementCarousel } from "@/components/advertisement-carousel"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import { useCampaigns } from "@/hooks/use-campaigns"
 import './globals.css'
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
 import BreakingNewsBanner from "@/components/BreakingNewsBanner"
 
 export default function Home() {
+  const { campaigns: bannerCampaigns, loading: bannerLoading, error: bannerError } = useCampaigns("BANNER")
+  const { campaigns: featuredCampaigns, loading: featuredLoading, error: featuredError } = useCampaigns("FEATURED")
   const currentDate = new Date().toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   })
- 
+
+  // Get the most recent featured campaign
+  const mostRecentFeatured = featuredCampaigns && featuredCampaigns.length > 0 ? featuredCampaigns[0] : null
+
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
   const user = useSelector((state: RootState) => state.auth.user)
   const userRole = user?.role 
@@ -43,21 +57,52 @@ export default function Home() {
                 <p className="font-serif text-lg italic">
                   Exclusive opportunities for businesses seeking to make a lasting impression
                 </p>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="font-bold">By Jonathan Pressman</span>
-                  <span>•</span>
-                  <span>Advertising Editor</span>
-                </div>
               </div>
 
               <div className="relative aspect-[16/9] overflow-hidden border border-black">
-                <Image
-                  src="/placeholder.svg?height=600&width=1200"
-                  alt="Vintage advertisement showcase"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white p-2 text-sm font-serif">
+                <Carousel className="w-full h-full">
+                  <CarouselContent>
+                    {bannerLoading ? (
+                      <CarouselItem>
+                        <div className="relative w-full h-full aspect-[16/9]">
+                          <Skeleton className="w-full h-full" />
+                        </div>
+                      </CarouselItem>
+                    ) : bannerError ? (
+                      <CarouselItem>
+                        <div className="relative w-full h-full aspect-[16/9] flex items-center justify-center">
+                          <p className="text-red-500">Error loading advertisements: {bannerError}</p>
+                        </div>
+                      </CarouselItem>
+                    ) : (
+                      bannerCampaigns.map((campaign) => (
+                        <CarouselItem key={campaign._id}>
+                          <Link 
+                            href={`/advertisements/${campaign._id}`} 
+                            className="block relative w-full h-full aspect-[16/9]"
+                          >
+                            <Image
+                              src={campaign.imageUrl}
+                              alt={campaign.headline}
+                              fill
+                              className="object-cover transition-transform hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                              <span className="text-white text-lg font-serif p-4 text-center">{campaign.headline}</span>
+                            </div>
+                          </Link>
+                        </CarouselItem>
+                      ))
+                    )}
+                  </CarouselContent>
+                  {bannerCampaigns.length > 1 && (
+                    <>
+                      <CarouselPrevious className="absolute left-4 bg-white/80 hover:bg-white" />
+                      <CarouselNext className="absolute right-4 bg-white/80 hover:bg-white" />
+                    </>
+                  )}
+                </Carousel>
+                <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white p-2 text-sm font-serif z-10">
                   A collection of premium advertisements from our distinguished clients
                 </div>
               </div>
@@ -111,17 +156,38 @@ export default function Home() {
               {/* Ad Space Showcase */}
               <div className="border border-black p-4 primary_bg">
                 <h3 className="font-serif text-xl text-black font-bold text-center border-b border-black pb-2 mb-4">
-                  Featured Advertisement
+                  Latest Featured Advertisement
                 </h3>
                 <div className="relative aspect-[4/5] overflow-hidden border border-black mb-4">
-                  <Image
-                    src="/placeholder.svg?height=500&width=400"
-                    alt="Premium advertisement space"
-                    fill
-                    className="object-cover"
-                  />
+                  {featuredLoading ? (
+                    <Skeleton className="w-full h-full" />
+                  ) : featuredError ? (
+                    <div className="w-full h-full flex items-center justify-center text-red-500 p-4 text-center">
+                      Unable to load featured advertisement
+                    </div>
+                  ) : mostRecentFeatured ? (
+                    <Link href={`/advertisements/${mostRecentFeatured._id}`} className="block relative w-full h-full">
+                      <Image
+                        src={mostRecentFeatured.imageUrl}
+                        alt={mostRecentFeatured.headline}
+                        fill
+                        className="object-cover transition-transform hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span className="text-white text-sm font-serif p-2 text-center">{mostRecentFeatured.headline}</span>
+                      </div>
+                    </Link>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-500 p-4 text-center">
+                      No featured advertisements available
+                    </div>
+                  )}
                 </div>
-                <p className="font-serif text-sm italic text-center">This premium space could feature your brand</p>
+                <p className="font-serif text-sm italic text-center">
+                  {mostRecentFeatured 
+                    ? mostRecentFeatured.campaignName 
+                    : "This premium space could feature your brand"}
+                </p>
                 <Button className="w-full rounded-none bg-black hover:bg-black/80 text-white mt-4">
                   Reserve This Space
                 </Button>
