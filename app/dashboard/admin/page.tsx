@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import Image from "next/image";
+import { ProtectedRoute } from "@/components/protected-route";
 
 interface User {
   _id: string;
@@ -407,6 +408,7 @@ export default function AdminDashboard() {
   };
 
   return (
+    <ProtectedRoute allowedRoles={["ADMIN"]}>
     <div className="flex min-h-screen flex-col">
       <div className="flex-1 flex">
         <AdminSidebar />
@@ -858,6 +860,7 @@ export default function AdminDashboard() {
       </Dialog>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }
 
