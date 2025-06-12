@@ -44,14 +44,7 @@ export function AdminSidebar() {
         })}
       </nav>
 
-      <div className="absolute bottom-4 px-3 w-64">
-        <Link href="/">
-          <button className="flex items-center gap-2 w-full px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-secondary/50">
-            <LogOut className="h-4 w-4" />
-            Sign Out
-          </button>
-        </Link>
-      </div>
+      
     </div>
   )
 }

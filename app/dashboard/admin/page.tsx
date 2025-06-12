@@ -1,6 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserRound, BadgePercent, ShieldCheck, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
@@ -8,6 +15,7 @@ import { AdminSidebar } from "@/components/admin-sidebar";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import Image from "next/image";
 
 interface User {
   _id: string;
@@ -42,6 +50,108 @@ interface Campaign {
   analytics: CampaignAnalytics;
 }
 
+function CampaignDetailsModal({ 
+  campaign, 
+  isOpen, 
+  onClose 
+}: { 
+  campaign: Campaign | null;
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  if (!campaign) return null;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>Campaign Details</DialogTitle>
+        </DialogHeader>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div className="relative aspect-video rounded-lg overflow-hidden">
+              <Image
+                src={campaign.imageUrl}
+                alt={campaign.headline}
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div>
+              <h3 className="font-semibold">Analytics</h3>
+              <div className="grid grid-cols-3 gap-4 mt-2">
+                <div className="p-2 bg-gray-50 rounded-lg">
+                  <div className="text-sm text-gray-500">Impressions</div>
+                  <div className="font-semibold">{campaign.analytics.impressions}</div>
+                </div>
+                <div className="p-2 bg-gray-50 rounded-lg">
+                  <div className="text-sm text-gray-500">Clicks</div>
+                  <div className="font-semibold">{campaign.analytics.clicks}</div>
+                </div>
+                <div className="p-2 bg-gray-50 rounded-lg">
+                  <div className="text-sm text-gray-500">CTR</div>
+                  <div className="font-semibold">{campaign.analytics.ctr}%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-semibold">Campaign Information</h3>
+              <div className="mt-2 space-y-2">
+                <div>
+                  <div className="text-sm text-gray-500">Campaign Name</div>
+                  <div>{campaign.campaignName}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-500">Type</div>
+                  <div>{campaign.campaignType}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-500">Status</div>
+                  <div className={campaign.status === 'ACTIVE' ? 'text-green-600' : 'text-yellow-600'}>
+                    {campaign.status}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold">Content</h3>
+              <div className="mt-2 space-y-2">
+                <div>
+                  <div className="text-sm text-gray-500">Headline</div>
+                  <div>{campaign.headline}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-500">Body</div>
+                  <div className="text-sm">{campaign.body}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-500">Call to Action</div>
+                  <div>{campaign.callToAction}</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold">Advertiser</h3>
+              <div className="mt-2 space-y-2">
+                <div>
+                  <div className="text-sm text-gray-500">Company</div>
+                  <div>{campaign.advertiser.companyName}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-500">Contact Person</div>
+                  <div>{campaign.advertiser.fullName}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export default function AdminDashboard() {
   const [userCount, setUserCount] = useState(0);
   const [advertiserCount, setAdvertiserCount] = useState(0);
@@ -57,6 +167,8 @@ export default function AdminDashboard() {
   const [loadingStatus, setLoadingStatus] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const usersPerPage = 10;
   const advertisersPerPage = 10;
   const campaignsPerPage = 10;
@@ -261,16 +373,47 @@ export default function AdminDashboard() {
     }
   };
 
- 
+  const handleDeleteUser = async (userId: string) => {
+    if (!token) {
+      console.error('No authentication token found');
+      return;
+    }
+
+    if (!window.confirm('Are you sure you want to delete this user?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://advertisemedia.onrender.com/api/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete user');
+      }
+
+      // Remove user from state
+      setUsers(prevUsers => prevUsers.filter(user => user._id !== userId));
+      setUserCount(prev => prev - 1);
+
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      // You might want to show an error message to the user here
+    }
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex-1 flex">
         <AdminSidebar />
-        <main className="flex-1 p-6">
-          <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+        <main className="flex-1 p-4 md:p-6">
+          <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Admin Dashboard</h1>
           
-          <div className="grid gap-6 md:grid-cols-3 mb-6">
+          <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-3 mb-4 md:mb-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Users</CardTitle>
@@ -351,20 +494,30 @@ export default function AdminDashboard() {
                   ) : (
                     <>
                       <div className="border rounded-md">
-                        <div className="grid grid-cols-4 p-4 font-medium border-b">
+                        <div className="grid grid-cols-2 md:gap-24 md:grid-cols-4 py-4 px-4 md:px-8 font-medium border-b">
                           <div>Name</div>
-                          <div>Email</div>
-                          <div>Company</div>
+                          <div className="hidden md:block">Email</div>
+                          <div className="hidden md:block">Company</div>
                           <div>Actions</div>
                         </div>
                         {getCurrentUsers().map((user) => (
-                          <div key={user._id} className="grid grid-cols-4 p-4 border-b last:border-0">
-                            <div>{user.fullName}</div>
-                            <div>{user.email}</div>
-                            <div>{user.companyName}</div>
+                          <div key={user._id} className="grid grid-cols-2 md:gap-24 md:grid-cols-4 py-4 px-4 border-b last:border-0">
+                            <div>
+                              <div>{user.fullName}</div>
+                              <div className="text-sm text-muted-foreground md:hidden">{user.email}</div>
+                              <div className="text-sm text-muted-foreground md:hidden">{user.companyName}</div>
+                            </div>
+                            <div className="hidden md:block">{user.email}</div>
+                            <div className="hidden md:block">{user.companyName}</div>
                             <div className="flex gap-2">
-                              <Button variant="outline" size="sm">Edit</Button>
-                              <Button variant="outline" size="sm">Delete</Button>
+                              
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleDeleteUser(user._id)}
+                              >
+                                Delete
+                              </Button>
                             </div>
                           </div>
                         ))}
@@ -421,14 +574,14 @@ export default function AdminDashboard() {
                         <div className="grid grid-cols-4 p-4 font-medium border-b">
                           <div>Name</div>
                           <div>Company</div>
-                          <div>Email</div>
+                          <div className="hidden md:flex">Email</div>
                           <div>Actions</div>
                         </div>
                         {getCurrentAdvertisers().map((advertiser) => (
                           <div key={advertiser._id} className="grid grid-cols-4 p-4 border-b last:border-0">
                             <div>{advertiser.fullName}</div>
-                            <div>{advertiser.companyName}</div>
-                            <div>{advertiser.email}</div>
+                            <div >{advertiser.companyName}</div>
+                            <div className="hidden md:flex">{advertiser.email}</div>
                             <div className="flex gap-2">
                               <Button variant="outline" size="sm">View</Button>
                               <Button variant="outline" size="sm">Suspend</Button>
@@ -479,34 +632,44 @@ export default function AdminDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="border rounded-md">
-                    <div className="grid grid-cols-6 p-4 font-medium border-b">
+                    <div className="grid grid-cols-3 md:grid-cols-6 px-4 md:px-8 py-4 font-medium border-b">
                       <div>Campaign</div>
-                      <div>Advertiser</div>
-                      <div>Type</div>
+                      <div className="hidden md:block">Advertiser</div>
+                      <div className="hidden md:block">Type</div>
                       <div>Status</div>
-                      <div>Performance</div>
+                      <div className="hidden md:block">Performance</div>
                       <div>Actions</div>
                     </div>
                     {getCurrentCampaigns().map((campaign) => (
-                      <div key={campaign._id} className="grid grid-cols-6 p-4 border-b last:border-0">
+                      <div key={campaign._id} className="grid grid-cols-3 md:grid-cols-6 px-4 md:px-8 py-4 border-b last:border-0">
                         <div>
                           <div className="font-medium">{campaign.campaignName}</div>
-                          <div className="text-sm text-muted-foreground">{campaign.headline}</div>
+                          <div className="text-sm text-muted-foreground md:hidden">{campaign.advertiser.companyName}</div>
+                          <div className="text-sm text-muted-foreground md:hidden">{campaign.campaignType}</div>
                         </div>
-                        <div>
+                        <div className="hidden md:block">
                           <div className="font-medium">{campaign.advertiser.companyName}</div>
                           <div className="text-sm text-muted-foreground">{campaign.advertiser.fullName}</div>
                         </div>
-                        <div>{campaign.campaignType}</div>
+                        <div className="hidden md:block">{campaign.campaignType}</div>
                         <div className={campaign.status === 'ACTIVE' ? 'text-green-600' : 'text-yellow-600'}>
                           {campaign.status}
                         </div>
-                        <div>
+                        <div className="hidden md:block">
                           <div className="text-sm">Clicks: {campaign.analytics.clicks}</div>
                           <div className="text-sm">CTR: {campaign.analytics.ctr}%</div>
                         </div>
                         <div className="flex gap-2">
-                          <Button variant="outline" size="sm">View</Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => {
+                              setSelectedCampaign(campaign);
+                              setIsModalOpen(true);
+                            }}
+                          >
+                            View
+                          </Button>
                           <Button
                             variant={campaign.status === 'PENDING' ? 'default' : 'outline'}
                             onClick={() => handleStatusUpdate(campaign._id, campaign.status)}
@@ -597,6 +760,102 @@ export default function AdminDashboard() {
             </TabsContent>
           </Tabs>
         </main>
+
+      {/* Campaign Details Modal */}
+      <Dialog open={isModalOpen} onOpenChange={() => {
+        setIsModalOpen(false);
+        setSelectedCampaign(null);
+      }}>
+        <DialogContent className="max-w-[95vw] md:max-w-2xl bg-white max-h-[90vh] overflow-y-auto p-4 md:p-6">
+          {selectedCampaign && (
+            <>
+              <DialogHeader className="top-0 z-10">
+                <DialogTitle className="text-xl md:text-2xl">Campaign Details</DialogTitle>
+              </DialogHeader>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <div className="space-y-4">
+                  <div className="relative aspect-video rounded-lg overflow-hidden">
+                    <Image
+                      src={selectedCampaign.imageUrl}
+                      alt={selectedCampaign.headline}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Analytics</h3>
+                    <div className="grid grid-cols-3 gap-4 mt-2">
+                      <div className="p-2 bg-gray-50 rounded-lg">
+                        <div className="text-sm text-gray-500">Impressions</div>
+                        <div className="font-semibold">{selectedCampaign.analytics.impressions}</div>
+                      </div>
+                      <div className="p-2 bg-gray-50 rounded-lg">
+                        <div className="text-sm text-gray-500">Clicks</div>
+                        <div className="font-semibold">{selectedCampaign.analytics.clicks}</div>
+                      </div>
+                      <div className="p-2 bg-gray-50 rounded-lg">
+                        <div className="text-sm text-gray-500">CTR</div>
+                        <div className="font-semibold">{selectedCampaign.analytics.ctr}%</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold">Campaign Information</h3>
+                    <div className="mt-2 space-y-2">
+                      <div>
+                        <div className="text-sm text-gray-500">Campaign Name</div>
+                        <div>{selectedCampaign.campaignName}</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Type</div>
+                        <div>{selectedCampaign.campaignType}</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Status</div>
+                        <div className={selectedCampaign.status === 'ACTIVE' ? 'text-green-600' : 'text-yellow-600'}>
+                          {selectedCampaign.status}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Content</h3>
+                    <div className="mt-2 space-y-2">
+                      <div>
+                        <div className="text-sm text-gray-500">Headline</div>
+                        <div>{selectedCampaign.headline}</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Body</div>
+                        <div className="text-sm">{selectedCampaign.body}</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Call to Action</div>
+                        <div>{selectedCampaign.callToAction}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Advertiser</h3>
+                    <div className="mt-2 space-y-2">
+                      <div>
+                        <div className="text-sm text-gray-500">Company</div>
+                        <div>{selectedCampaign.advertiser.companyName}</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Contact Person</div>
+                        <div>{selectedCampaign.advertiser.fullName}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
       </div>
     </div>
   );

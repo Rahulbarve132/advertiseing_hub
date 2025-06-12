@@ -11,10 +11,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "@/components/ui/use-toast"
-
 import { setCredentials, setLoading, setError, clearError, logout } from '@/redux/features/authSlice'
 import type { AppDispatch, RootState } from '@/redux/store'
-
 export function SignupForm() {
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
@@ -173,9 +171,7 @@ export function SignupForm() {
           <Button type="submit" className="w-full uppercase" disabled={loading}>
             {loading ? "Creating account..." : "Create account"}
           </Button>
-          <Button type="button" className="w-full mt-4 uppercase" onClick={handleLogout}>
-            Logout
-          </Button>
+          
         </CardContent>
       </Card>
     </form>

@@ -1,6 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Card,
   CardContent,
   CardDescription,
@@ -61,6 +67,8 @@ function SkeletonRow() {
 export default function AdvertiserDashboard() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const user = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
@@ -255,10 +263,21 @@ export default function AdvertiserDashboard() {
                             </span>
                           </div>
                           <div className="flex gap-2">
-                            <Button variant="outline" size="sm">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              
+                            >
                               Edit
                             </Button>
-                            <Button variant="outline" size="sm">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setSelectedCampaign(campaign);
+                                setIsModalOpen(true);
+                              }}
+                            >
                               View
                             </Button>
                           </div>
@@ -426,8 +445,182 @@ export default function AdvertiserDashboard() {
               </Card>
             </TabsContent>
           </Tabs>
+
+          {selectedCampaign && (
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Edit Campaign</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Campaign Name
+                    </label>
+                    <input
+                      type="text"
+                      className="w-full p-2 border rounded-md"
+                      value={selectedCampaign.campaignName}
+                      onChange={(e) =>
+                        setSelectedCampaign({
+                          ...selectedCampaign,
+                          campaignName: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Campaign Type
+                    </label>
+                    <select
+                      className="w-full p-2 border rounded-md"
+                      value={selectedCampaign.campaignType}
+                      onChange={(e) =>
+                        setSelectedCampaign({
+                          ...selectedCampaign,
+                          campaignType: e.target.value as
+                            | "BANNER"
+                            | "FEATURED"
+                            | "INTERACTIVE",
+                        })
+                      }
+                    >
+                      <option value="BANNER">Banner</option>
+                      <option value="FEATURED">Featured</option>
+                      <option value="INTERACTIVE">Interactive</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Status
+                    </label>
+                    <select
+                      className="w-full p-2 border rounded-md"
+                      value={selectedCampaign.status}
+                      onChange={(e) =>
+                        setSelectedCampaign({
+                          ...selectedCampaign,
+                          status: e.target.value as "ACTIVE" | "PENDING" | "SCHEDULED",
+                        })
+                      }
+                    >
+                      <option value="ACTIVE">Active</option>
+                      <option value="PENDING">Pending</option>
+                      <option value="SCHEDULED">Scheduled</option>
+                    </select>
+                  </div>
+
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsModalOpen(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        // TODO: Handle save campaign
+                        setIsModalOpen(false);
+                      }}
+                    >
+                      Save Changes
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          )}
         </main>
       </div>
+
+      {/* Campaign Details Modal */}
+      <Dialog open={isModalOpen} onOpenChange={() => {
+        setIsModalOpen(false);
+        setSelectedCampaign(null);
+      }}>
+        <DialogContent className="max-w-2xl bg-white max-h-[90vh] overflow-y-auto">
+          {selectedCampaign && (
+            <>
+              <DialogHeader>
+                <DialogTitle>{selectedCampaign.campaignName}</DialogTitle>
+              </DialogHeader>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="relative aspect-video rounded-lg overflow-hidden">
+                    <img
+                      src={selectedCampaign.imageUrl}
+                      alt={selectedCampaign.headline}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Analytics</h3>
+                    <div className="grid grid-cols-3 gap-4 mt-2">
+                      <div className="p-2 bg-gray-50 rounded-lg">
+                        <div className="text-sm text-gray-500">Impressions</div>
+                        <div className="font-semibold">{selectedCampaign.analytics.impressions}</div>
+                      </div>
+                      <div className="p-2 bg-gray-50 rounded-lg">
+                        <div className="text-sm text-gray-500">Clicks</div>
+                        <div className="font-semibold">{selectedCampaign.analytics.clicks}</div>
+                      </div>
+                      <div className="p-2 bg-gray-50 rounded-lg">
+                        <div className="text-sm text-gray-500">CTR</div>
+                        <div className="font-semibold">{selectedCampaign.analytics.ctr}%</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold">Campaign Information</h3>
+                    <div className="mt-2 space-y-2">
+                      <div>
+                        <div className="text-sm text-gray-500">Campaign Type</div>
+                        <div>{selectedCampaign.campaignType}</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Status</div>
+                        <div className={selectedCampaign.status === 'ACTIVE' ? 'text-green-600' : 'text-yellow-600'}>
+                          {selectedCampaign.status}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Content</h3>
+                    <div className="mt-2 space-y-2">
+                      <div>
+                        <div className="text-sm text-gray-500">Headline</div>
+                        <div>{selectedCampaign.headline}</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Body</div>
+                        <div className="text-sm">{selectedCampaign.body}</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Call to Action</div>
+                        <div>{selectedCampaign.callToAction}</div>
+                      </div>
+                    </div>
+                  </div>
+                  {selectedCampaign.campaignDescription && (
+                    <div>
+                      <h3 className="font-semibold">Description</h3>
+                      <div className="mt-2">
+                        <div className="text-sm">{selectedCampaign.campaignDescription}</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
