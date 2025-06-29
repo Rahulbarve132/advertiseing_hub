@@ -69,8 +69,10 @@ export default function AdvertiserDashboard() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<"view" | "edit" | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const user = useSelector((state: RootState) => state.auth.user);
+  const token = useSelector((state: RootState) => state.auth.token);
 
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -268,7 +270,10 @@ export default function AdvertiserDashboard() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                
+                                onClick={() => {
+                                  setSelectedCampaign(campaign);
+                                  setModalType("edit");
+                                }}
                               >
                                 Edit
                               </Button>
@@ -277,7 +282,7 @@ export default function AdvertiserDashboard() {
                                 size="sm"
                                 onClick={() => {
                                   setSelectedCampaign(campaign);
-                                  setIsModalOpen(true);
+                                  setModalType("view");
                                 }}
                               >
                                 View
@@ -448,13 +453,20 @@ export default function AdvertiserDashboard() {
               </TabsContent>
             </Tabs>
 
-            {selectedCampaign && (
-              <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogContent>
+            {/* Edit Modal */}
+            {selectedCampaign && modalType === "edit" && (
+              <Dialog open={modalType === "edit"} onOpenChange={(open) => {
+                if (!open) {
+                  setModalType(null);
+                  setSelectedCampaign(null);
+                }
+              }}>
+                <DialogContent className="max-w-2xl bg-white max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle>Edit Campaign</DialogTitle>
                   </DialogHeader>
                   <div className="grid gap-4">
+                    {/* ...existing code for form fields and buttons... */}
                     <div>
                       <label className="block text-sm font-medium mb-1">
                         Campaign Name
@@ -471,7 +483,21 @@ export default function AdvertiserDashboard() {
                         }
                       />
                     </div>
-
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        Campaign Description
+                      </label>
+                      <textarea
+                        className="w-full p-2 border rounded-md"
+                        value={selectedCampaign.campaignDescription || ""}
+                        onChange={(e) =>
+                          setSelectedCampaign({
+                            ...selectedCampaign,
+                            campaignDescription: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
                     <div>
                       <label className="block text-sm font-medium mb-1">
                         Campaign Type
@@ -494,41 +520,129 @@ export default function AdvertiserDashboard() {
                         <option value="INTERACTIVE">Interactive</option>
                       </select>
                     </div>
-
                     <div>
                       <label className="block text-sm font-medium mb-1">
-                        Status
+                        Headline
                       </label>
-                      <select
+                      <input
+                        type="text"
                         className="w-full p-2 border rounded-md"
-                        value={selectedCampaign.status}
+                        value={selectedCampaign.headline}
                         onChange={(e) =>
                           setSelectedCampaign({
                             ...selectedCampaign,
-                            status: e.target.value as "ACTIVE" | "PENDING" | "SCHEDULED",
+                            headline: e.target.value,
                           })
                         }
-                      >
-                        <option value="ACTIVE">Active</option>
-                        <option value="PENDING">Pending</option>
-                        <option value="SCHEDULED">Scheduled</option>
-                      </select>
+                      />
                     </div>
-
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        Body
+                      </label>
+                      <textarea
+                        className="w-full p-2 border rounded-md"
+                        value={selectedCampaign.body}
+                        onChange={(e) =>
+                          setSelectedCampaign({
+                            ...selectedCampaign,
+                            body: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        Call to Action
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full p-2 border rounded-md"
+                        value={selectedCampaign.callToAction}
+                        onChange={(e) =>
+                          setSelectedCampaign({
+                            ...selectedCampaign,
+                            callToAction: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    
                     <div className="flex justify-end gap-2">
                       <Button
                         variant="outline"
-                        onClick={() => setIsModalOpen(false)}
+                        onClick={() => {
+                          setModalType(null);
+                          setSelectedCampaign(null);
+                        }}
+                        disabled={isSaving}
                       >
                         Cancel
                       </Button>
                       <Button
-                        onClick={() => {
-                          // TODO: Handle save campaign
-                          setIsModalOpen(false);
+                        disabled={isSaving}
+                        onClick={async () => {
+                          if (!selectedCampaign) return;
+                          setIsSaving(true);
+                          try {
+                            const res = await fetch(
+                              `https://advertisemedia.onrender.com/api/campaigns/${selectedCampaign._id}/details`,
+                              {
+                                method: "PUT",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                  ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                                },
+                                body: JSON.stringify({
+                                  campaignName: selectedCampaign.campaignName,
+                                  campaignDescription: selectedCampaign.campaignDescription,
+                                  campaignType: selectedCampaign.campaignType,
+                                  headline: selectedCampaign.headline,
+                                  body: selectedCampaign.body,
+                                  callToAction: selectedCampaign.callToAction,
+                                  status: selectedCampaign.status,
+                                }),
+                              }
+                            );
+                            if (!res.ok) throw new Error("Failed to update campaign");
+                            toast.success("Campaign updated successfully");
+                            setModalType(null);
+                            setSelectedCampaign(null);
+                            // Re-fetch campaigns to rerender the list
+                            setLoading(true);
+                            const fetchCampaigns = async () => {
+                              try {
+                                const response = await fetch(
+                                  "https://advertisemedia.onrender.com/api/campaigns"
+                                );
+                                if (!response.ok) {
+                                  throw new Error("Failed to fetch campaigns");
+                                }
+                                const data = await response.json();
+                                const filteredCampaigns = (data.campaigns || data).filter(
+                                  (campaign: { advertiser: any }) =>
+                                    campaign.advertiser &&
+                                    (
+                                      (typeof campaign.advertiser === "object" && campaign.advertiser._id === user?.id) ||
+                                      (typeof campaign.advertiser === "string" && campaign.advertiser === user?.id)
+                                    )
+                                );
+                                setCampaigns(filteredCampaigns);
+                              } catch (error) {
+                                toast.error("Failed to fetch campaigns. Please try again.");
+                              } finally {
+                                setLoading(false);
+                              }
+                            };
+                            fetchCampaigns();
+                          } catch (err) {
+                            toast.error("Failed to update campaign");
+                          } finally {
+                            setIsSaving(false);
+                          }
                         }}
                       >
-                        Save Changes
+                        {isSaving ? "Saving..." : "Save Changes"}
                       </Button>
                     </div>
                   </div>
@@ -539,90 +653,90 @@ export default function AdvertiserDashboard() {
         </div>
 
         {/* Campaign Details Modal */}
-        <Dialog open={isModalOpen} onOpenChange={() => {
-          setIsModalOpen(false);
-          setSelectedCampaign(null);
-        }}>
-          <DialogContent className="max-w-2xl bg-white max-h-[90vh] overflow-y-auto">
-            {selectedCampaign && (
-              <>
-                <DialogHeader>
-                  <DialogTitle>{selectedCampaign.campaignName}</DialogTitle>
-                </DialogHeader>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <div className="relative aspect-video rounded-lg overflow-hidden">
-                      <img
-                        src={selectedCampaign.imageUrl}
-                        alt={selectedCampaign.headline}
-                        className="object-cover w-full h-full"
-                      />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold">Analytics</h3>
-                      <div className="grid grid-cols-3 gap-4 mt-2">
-                        <div className="p-2 bg-gray-50 rounded-lg">
-                          <div className="text-sm text-gray-500">Impressions</div>
-                          <div className="font-semibold">{selectedCampaign.analytics.impressions}</div>
-                        </div>
-                        <div className="p-2 bg-gray-50 rounded-lg">
-                          <div className="text-sm text-gray-500">Clicks</div>
-                          <div className="font-semibold">{selectedCampaign.analytics.clicks}</div>
-                        </div>
-                        <div className="p-2 bg-gray-50 rounded-lg">
-                          <div className="text-sm text-gray-500">CTR</div>
-                          <div className="font-semibold">{selectedCampaign.analytics.ctr}%</div>
-                        </div>
-                      </div>
-                    </div>
+        {selectedCampaign && modalType === "view" && (
+          <Dialog open={modalType === "view"} onOpenChange={(open) => {
+            if (!open) {
+              setModalType(null);
+              setSelectedCampaign(null);
+            }
+          }}>
+            <DialogContent className="max-w-2xl bg-white max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>{selectedCampaign.campaignName}</DialogTitle>
+              </DialogHeader>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="relative aspect-video rounded-lg overflow-hidden">
+                    <img
+                      src={selectedCampaign.imageUrl}
+                      alt={selectedCampaign.headline}
+                      className="object-cover w-full h-full"
+                    />
                   </div>
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-semibold">Campaign Information</h3>
-                      <div className="mt-2 space-y-2">
-                        <div>
-                          <div className="text-sm text-gray-500">Campaign Type</div>
-                          <div>{selectedCampaign.campaignType}</div>
-                        </div>
-                        <div>
-                          <div className="text-sm text-gray-500">Status</div>
-                          <div className={selectedCampaign.status === 'ACTIVE' ? 'text-green-600' : 'text-yellow-600'}>
-                            {selectedCampaign.status}
-                          </div>
-                        </div>
+                  <div>
+                    <h3 className="font-semibold">Analytics</h3>
+                    <div className="grid grid-cols-3 gap-4 mt-2">
+                      <div className="p-2 bg-gray-50 rounded-lg">
+                        <div className="text-sm text-gray-500">Impressions</div>
+                        <div className="font-semibold">{selectedCampaign.analytics.impressions}</div>
+                      </div>
+                      <div className="p-2 bg-gray-50 rounded-lg">
+                        <div className="text-sm text-gray-500">Clicks</div>
+                        <div className="font-semibold">{selectedCampaign.analytics.clicks}</div>
+                      </div>
+                      <div className="p-2 bg-gray-50 rounded-lg">
+                        <div className="text-sm text-gray-500">CTR</div>
+                        <div className="font-semibold">{selectedCampaign.analytics.ctr}%</div>
                       </div>
                     </div>
-                    <div>
-                      <h3 className="font-semibold">Content</h3>
-                      <div className="mt-2 space-y-2">
-                        <div>
-                          <div className="text-sm text-gray-500">Headline</div>
-                          <div>{selectedCampaign.headline}</div>
-                        </div>
-                        <div>
-                          <div className="text-sm text-gray-500">Body</div>
-                          <div className="text-sm">{selectedCampaign.body}</div>
-                        </div>
-                        <div>
-                          <div className="text-sm text-gray-500">Call to Action</div>
-                          <div>{selectedCampaign.callToAction}</div>
-                        </div>
-                      </div>
-                    </div>
-                    {selectedCampaign.campaignDescription && (
-                      <div>
-                        <h3 className="font-semibold">Description</h3>
-                        <div className="mt-2">
-                          <div className="text-sm">{selectedCampaign.campaignDescription}</div>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
-              </>
-            )}
-          </DialogContent>
-        </Dialog>
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold">Campaign Information</h3>
+                    <div className="mt-2 space-y-2">
+                      <div>
+                        <div className="text-sm text-gray-500">Campaign Type</div>
+                        <div>{selectedCampaign.campaignType}</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Status</div>
+                        <div className={selectedCampaign.status === 'ACTIVE' ? 'text-green-600' : 'text-yellow-600'}>
+                          {selectedCampaign.status}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Content</h3>
+                    <div className="mt-2 space-y-2">
+                      <div>
+                        <div className="text-sm text-gray-500">Headline</div>
+                        <div>{selectedCampaign.headline}</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Body</div>
+                        <div className="text-sm">{selectedCampaign.body}</div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-gray-500">Call to Action</div>
+                        <div>{selectedCampaign.callToAction}</div>
+                      </div>
+                    </div>
+                  </div>
+                  {selectedCampaign.campaignDescription && (
+                    <div>
+                      <h3 className="font-semibold">Description</h3>
+                      <div className="mt-2">
+                        <div className="text-sm">{selectedCampaign.campaignDescription}</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
     </ProtectedRoute>
   );
