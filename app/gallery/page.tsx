@@ -8,18 +8,18 @@ import '@/app/globals.css'
 
 export default function GalleryPage() {
   return (
-    <div className="min-h-screen main_bg">
+    <div className="min-h-screen main_bg rounded-xl">
     <BreakingNewsBanner/>
 
       <main className="container py-8">
         {/* Page Title */}
-        <div className="border-b-2 border-black mb-8 pb-4">
+        <div className=" border-black mb-4 pb-4 rounded-xl">
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-center">Advertisement Gallery</h1>
           <p className="font-serif text-center text-lg mt-2 italic">Showcasing the art of premium advertising</p>
         </div>
 
         {/* Introduction */}
-        <div className="max-w-3xl mx-auto mb-12">
+        <div className="max-w-3xl mx-auto mb-12 rounded-lg">
           <p className="font-serif text-lg leading-relaxed first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-2">
             VDoAds has had the privilege of showcasing exceptional advertisements from distinguished brands
             across various industries. Our gallery features a selection of these advertisements, demonstrating the
@@ -28,18 +28,18 @@ export default function GalleryPage() {
         </div>
 
         {/* Gallery Tabs */}
-        <Tabs defaultValue="luxury" className="w-full mb-16">
-          <TabsList className="grid w-full grid-cols-4 mb-8">
-            <TabsTrigger value="luxury" className="font-serif">
+        <Tabs defaultValue="luxury" className="w-full mb-16 rounded-xl">
+          <TabsList className="grid w-full grid-cols-4 mb-8 rounded-lg">
+            <TabsTrigger value="luxury" className="font-serif rounded-lg">
               Luxury
             </TabsTrigger>
-            <TabsTrigger value="fashion" className="font-serif">
+            <TabsTrigger value="fashion" className="font-serif rounded-lg">
               Fashion
             </TabsTrigger>
-            <TabsTrigger value="travel" className="font-serif">
+            <TabsTrigger value="travel" className="font-serif rounded-lg">
               Travel
             </TabsTrigger>
-            <TabsTrigger value="culinary" className="font-serif">
+            <TabsTrigger value="culinary" className="font-serif rounded-lg">
               Culinary
             </TabsTrigger>
           </TabsList>
@@ -49,17 +49,17 @@ export default function GalleryPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((item) => (
-                <div key={`luxury-${item}`} className="border border-black overflow-hidden group">
-                  <div className="relative aspect-[3/4]">
+                <div key={`luxury-${item}`} className="border border-black overflow-hidden group rounded-xl">
+                  <div className="relative aspect-[3/4] rounded-t-xl overflow-hidden">
                     <Image
                       src={`/placeholder.svg?height=800&width=600`}
                       alt={`Luxury advertisement example ${item}`}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105 rounded-t-xl"
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-t-xl"></div>
                   </div>
-                  <div className="p-4 bg-white">
+                  <div className="p-4 bg-white rounded-b-xl">
                     <h3 className="font-serif text-lg font-bold">Luxury Timepiece</h3>
                     <p className="font-serif text-sm">Front Page Advertisement</p>
                   </div>
@@ -73,17 +73,17 @@ export default function GalleryPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((item) => (
-                <div key={`fashion-${item}`} className="border border-black overflow-hidden group">
-                  <div className="relative aspect-[3/4]">
+                <div key={`fashion-${item}`} className="border border-black overflow-hidden group rounded-xl">
+                  <div className="relative aspect-[3/4] rounded-t-xl overflow-hidden">
                     <Image
                       src={`/placeholder.svg?height=800&width=600`}
                       alt={`Fashion advertisement example ${item}`}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105 rounded-t-xl"
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-t-xl"></div>
                   </div>
-                  <div className="p-4 bg-white">
+                  <div className="p-4 bg-white rounded-b-xl">
                     <h3 className="font-serif text-lg font-bold">Vintage Apparel</h3>
                     <p className="font-serif text-sm">Feature Section Advertisement</p>
                   </div>
@@ -97,17 +97,17 @@ export default function GalleryPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((item) => (
-                <div key={`travel-${item}`} className="border border-black overflow-hidden group">
-                  <div className="relative aspect-[3/4]">
+                <div key={`travel-${item}`} className="border border-black overflow-hidden group rounded-xl">
+                  <div className="relative aspect-[3/4] rounded-t-xl overflow-hidden">
                     <Image
                       src={`/placeholder.svg?height=800&width=600`}
                       alt={`Travel advertisement example ${item}`}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105 rounded-t-xl"
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-t-xl"></div>
                   </div>
-                  <div className="p-4 bg-white">
+                  <div className="p-4 bg-white rounded-b-xl">
                     <h3 className="font-serif text-lg font-bold">Heritage Hotels</h3>
                     <p className="font-serif text-sm">Custom Advertisement</p>
                   </div>
@@ -121,17 +121,17 @@ export default function GalleryPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((item) => (
-                <div key={`culinary-${item}`} className="border border-black overflow-hidden group">
-                  <div className="relative aspect-[3/4]">
+                <div key={`culinary-${item}`} className="border border-black overflow-hidden group rounded-xl">
+                  <div className="relative aspect-[3/4] rounded-t-xl overflow-hidden">
                     <Image
                       src={`/placeholder.svg?height=800&width=600`}
                       alt={`Culinary advertisement example ${item}`}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105 rounded-t-xl"
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-t-xl"></div>
                   </div>
-                  <div className="p-4 bg-white">
+                  <div className="p-4 bg-white rounded-b-xl">
                     <h3 className="font-serif text-lg font-bold">Artisanal Spirits</h3>
                     <p className="font-serif text-sm">Feature Section Advertisement</p>
                   </div>
@@ -142,18 +142,18 @@ export default function GalleryPage() {
         </Tabs>
 
         {/* Featured Advertisement */}
-        <section className="mb-16 border border-black bg-white p-8">
+        <section className="mb-16 border border-black bg-white p-8 rounded-xl">
           <div className="flex items-center justify-center mb-4">
-            <div className="bg-black text-white px-4 py-1 font-serif text-sm">FEATURED ADVERTISEMENT</div>
+            <div className="bg-black text-white px-4 py-1 font-serif text-sm rounded-lg">FEATURED ADVERTISEMENT</div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="relative aspect-square border border-black">
+            <div className="relative aspect-square border border-black rounded-xl overflow-hidden">
               <Image
                 src="/placeholder.svg?height=800&width=800"
                 alt="Featured luxury advertisement"
                 fill
-                className="object-cover"
+                className="object-cover rounded-xl"
               />
             </div>
 
@@ -199,11 +199,11 @@ export default function GalleryPage() {
         </section>
 
         {/* Design Process */}
-        <section className="mb-16">
+        <section className="mb-16 rounded-xl">
           <h2 className="font-serif text-3xl font-bold text-center mb-8">The Advertisement Design Process</h2>
 
           <div className="grid md:grid-cols-4 gap-6">
-            <div className="border border-black p-6 bg-white text-center hover:shadow-xl transition-shadow">
+            <div className="border border-black p-6 bg-white text-center hover:shadow-xl transition-shadow rounded-xl">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-black text-white mb-4 font-serif font-bold text-xl">
                 1
               </div>
@@ -213,7 +213,7 @@ export default function GalleryPage() {
               </p>
             </div>
 
-            <div className="border border-black p-6 bg-white text-center hover:shadow-xl transition-shadow">
+            <div className="border border-black p-6 bg-white text-center hover:shadow-xl transition-shadow rounded-xl">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-black text-white mb-4 font-serif font-bold text-xl">
                 2
               </div>
@@ -224,7 +224,7 @@ export default function GalleryPage() {
               </p>
             </div>
 
-            <div className="border border-black p-6 bg-white text-center hover:shadow-xl transition-shadow">
+            <div className="border border-black p-6 bg-white text-center hover:shadow-xl transition-shadow rounded-xl">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-black text-white mb-4 font-serif font-bold text-xl">
                 3
               </div>
@@ -235,7 +235,7 @@ export default function GalleryPage() {
               </p>
             </div>
 
-            <div className="border border-black p-6 bg-white text-center hover:shadow-xl transition-shadow">
+            <div className="border border-black p-6 bg-white text-center hover:shadow-xl transition-shadow rounded-xl">
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-black text-white mb-4 font-serif font-bold text-xl">
                 4
               </div>
@@ -248,14 +248,14 @@ export default function GalleryPage() {
         </section>
 
         {/* Call to Action */}
-        <section className="secondary_bg text-white p-8 text-center">
+        <section className="secondary_bg text-white p-8 text-center rounded-xl">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">Create Your Own Masterpiece</h2>
           <p className="font-serif text-lg mb-6 max-w-2xl mx-auto">
             Join the distinguished brands featured in our gallery and create an advertisement that captivates and
             converts.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-white text-black hover:bg-white/90 rounded-none text-lg px-8">
+            <Button className="bg-white text-black hover:bg-white/90 rounded-xl text-lg px-8">
               <Link href="/contact">Contact Our Design Team</Link>
             </Button>
             

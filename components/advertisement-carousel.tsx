@@ -93,11 +93,7 @@ export function AdvertisementCarousel() {
                 <h3 className="text-xl font-bold text-gray-900">{campaign.headline}</h3>
               </div>
               <p className="text-sm text-gray-500 mt-1">{campaign.campaignName}</p>
-              <p className="text-sm font-medium text-gray-800 mt-2">{campaign.body}</p>
-              <div className="flex justify-between items-center mt-3 text-xs text-gray-500">
-                <span>{campaign.advertiser.companyName}</span>
-                <span>{campaign.callToAction}</span>
-              </div>
+             
             </div>
           </Link>
         ))}

@@ -14,7 +14,7 @@ const BreakingNewsBanner = () => {
     <div>
       <div className="secondary_bg text-white py-2 overflow-hidden">
         <div className="container flex items-center gap-4">
-          <span className="primary_bg text-black px-2 py-2 text-xs font-bold uppercase whitespace-nowrap">
+          <span className="rounded-md bg-black px-2 py-2 text-xs font-bold uppercase whitespace-nowrap">
             Breaking News
           </span>
           <div className="overflow-hidden whitespace-nowrap w-full">
@@ -28,7 +28,7 @@ const BreakingNewsBanner = () => {
 
           {!isAuthenticated ? (
             <Link href="/signup" className="hidden md:flex items-center gap-1">
-              <div className="bg-black text-white px-2 py-2 text-xs font-bold uppercase whitespace-nowrap">
+              <div className="bg-black text-white px-2 rounded-md py-2 text-xs font-bold uppercase whitespace-nowrap">
                 Post Free Ads
               </div>
             </Link>

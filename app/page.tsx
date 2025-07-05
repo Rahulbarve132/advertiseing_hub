@@ -1,4 +1,5 @@
 "use client"
+import React from "react";
 import Link from "next/link"
 import Image from "next/image"
 import { Coffee, Mail, Menu, Search, Sun } from "lucide-react"
@@ -14,9 +15,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { useCampaigns } from "@/hooks/use-campaigns"
+import { AdvertisementCarouselItem } from "@/components/AdvertisementCarouselItem"
 import './globals.css'
-import { useSelector } from "react-redux"
-import { RootState } from "@/redux/store"
 import BreakingNewsBanner from "@/components/BreakingNewsBanner"
 
 export default function Home() {
@@ -32,25 +32,23 @@ export default function Home() {
   // Get the most recent featured campaign
   const mostRecentFeatured = featuredCampaigns && featuredCampaigns.length > 0 ? featuredCampaigns[0] : null
 
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
-  const user = useSelector((state: RootState) => state.auth.user)
-  const userRole = user?.role 
+
 
   
 
   return (
-    <div className="min-h-screen main_bg ">
+    <div className="min-h-screen main_bg rounded-xl">
       {/* Header */}
       <BreakingNewsBanner/>
     
 
       {/* Main Content */}
-      <main className="container py-8">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <main className="container py-8 rounded-xl">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 rounded-xl">
           {/* Featured Story */}
-          <div className="md:col-span-8 border-r border-black pr-8">
-            <div className="space-y-6">
-              <div className="space-y-2">
+          <div className="md:col-span-8  border-black  rounded-xl">
+            <div className="space-y-6 rounded-xl">
+              <div className="space-y-2 rounded-xl">
                 <h2 className="font-serif text-4xl font-bold leading-tight">
                   Premium Advertising Space Now Available for Distinguished Brands
                 </h2>
@@ -59,7 +57,7 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="relative aspect-[16/9] overflow-hidden border border-black">
+              <div className="relative aspect-[16/9] overflow-hidden border border-black rounded-xl">
                 <Carousel className="w-full h-full">
                   <CarouselContent>
                     {bannerLoading ? (
@@ -77,20 +75,7 @@ export default function Home() {
                     ) : (
                       bannerCampaigns.map((campaign) => (
                         <CarouselItem key={campaign._id}>
-                          <Link 
-                            href={`/advertisements/${campaign._id}`} 
-                            className="block relative w-full h-full aspect-[16/9]"
-                          >
-                            <Image
-                              src={campaign.imageUrl}
-                              alt={campaign.headline}
-                              fill
-                              className="object-cover transition-transform hover:scale-105"
-                            />
-                            <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
-                              <span className="text-white text-lg font-serif p-4 text-center">{campaign.headline}</span>
-                            </div>
-                          </Link>
+                          <AdvertisementCarouselItem campaign={campaign} />
                         </CarouselItem>
                       ))
                     )}
@@ -120,23 +105,23 @@ export default function Home() {
                 Harlow. "Our clients report engagement rates far exceeding industry standards."
               </p>
 
-              <div className="primary_bg border  border-black p-6 my-8">
+              <div className="primary_bg border  border-black p-6 my-8 rounded-xl">
                 <h3 className="font-serif text-2xl font-bold mb-4 text-center text-black">Premium Advertising Packages</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="border border-black bg-white p-4 text-center hover:shadow-xl transition-shadow">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 rounded-xl">
+                  <div className="border border-black bg-white p-4 text-center hover:shadow-xl transition-shadow rounded-xl">
                     <h4 className="font-serif text-xl font-bold">Front Page</h4>
                     <p className="font-serif my-2">Prime visibility with guaranteed impressions</p>
-                    <Button className="rounded-none bg-black hover:bg-black/80 text-white mt-2">Learn More</Button>
+                    <Button className=" bg-black rounded-xl hover:bg-black/80 text-white mt-2">Learn More</Button>
                   </div>
-                  <div className="border border-black bg-white p-4 text-center hover:shadow-xl transition-shadow">
+                  <div className="border border-black bg-white p-4 text-center hover:shadow-xl transition-shadow rounded-xl">
                     <h4 className="font-serif text-xl font-bold">Feature Section</h4>
                     <p className="font-serif my-2">Contextual placement alongside relevant content</p>
-                    <Button className="rounded-none bg-black hover:bg-black/80 text-white mt-2">Learn More</Button>
+                    <Button className=" bg-black rounded-xl hover:bg-black/80 text-white mt-2">Learn More</Button>
                   </div>
-                  <div className="border border-black bg-white p-4 text-center hover:shadow-xl transition-shadow">
+                  <div className="border border-black bg-white p-4 text-center hover:shadow-xl transition-shadow rounded-xl">
                     <h4 className="font-serif text-xl font-bold">Custom Insert</h4>
                     <p className="font-serif my-2">Bespoke advertising solutions for unique campaigns</p>
-                    <Button className="rounded-none bg-black hover:bg-black/80 text-white mt-2">Learn More</Button>
+                    <Button className=" bg-black rounded-xl hover:bg-black/80 text-white mt-2">Learn More</Button>
                   </div>
                 </div>
               </div>
@@ -151,14 +136,14 @@ export default function Home() {
           </div>
 
           {/* Sidebar */}
-          <div className="md:col-span-4">
-            <div className="space-y-8">
+          <div className="md:col-span-4 rounded-xl">
+            <div className="space-y-8 rounded-xl">
               {/* Ad Space Showcase */}
-              <div className="border border-black p-4 primary_bg">
-                <h3 className="font-serif text-xl text-black font-bold text-center border-b border-black pb-2 mb-4">
+              <div className="border border-black p-4 primary_bg rounded-xl">
+                <h3 className="font-serif text-xl text-black font-bold text-center  border-black pb-2 mb-4">
                   Latest Featured Advertisement
                 </h3>
-                <div className="relative aspect-[4/5] overflow-hidden border border-black mb-4">
+                <div className="relative aspect-[4/5] overflow-hidden border border-black mb-4 rounded-xl">
                   {featuredLoading ? (
                     <Skeleton className="w-full h-full" />
                   ) : featuredError ? (
@@ -188,25 +173,25 @@ export default function Home() {
                     ? mostRecentFeatured.campaignName 
                     : "This premium space could feature your brand"}
                 </p>
-                <Button className="w-full rounded-none bg-black hover:bg-black/80 text-white mt-4">
+                <Button className="w-full rounded-xl bg-black hover:bg-black/80 text-white mt-4">
                   Reserve This Space
                 </Button>
               </div>
 
               {/* Newsletter Signup */}
-              <div className="border border-black p-4">
+              <div className="border border-black p-4 rounded-xl">
                 <h3 className="font-serif text-xl font-bold text-center mb-4">Subscribe to Our Newsletter</h3>
                 <p className="font-serif text-sm mb-4">
                   Stay updated with our latest advertising opportunities and special rates.
                 </p>
                 <div className="space-y-2">
-                  <Input placeholder="Your Email Address" className="rounded-none border-black" />
-                  <Button className="bg-black w-full rounded-none">Subscribe Now</Button>
+                  <Input placeholder="Your Email Address" className="rounded-xl border-black" />
+                  <Button className="bg-black w-full rounded-xl">Subscribe Now</Button>
                 </div>
               </div>
 
               {/* Quick Links */}
-              <div className="border border-black p-4">
+              <div className="border border-black p-4 rounded-xl">
                 <h3 className="font-serif text-xl font-bold text-center border-b border-black pb-2 mb-4">
                   Advertising Resources
                 </h3>
@@ -240,7 +225,7 @@ export default function Home() {
               </div>
 
               {/* Coffee Break */}
-              <div className="border border-black p-4 primary_bg text-black text-center">
+              <div className="border border-black p-4 primary_bg text-black text-center rounded-xl">
                 <Coffee className="h-8 w-8 mx-auto mb-2" />
                 <h3 className="font-serif text-lg font-bold">Coffee Break</h3>
                 <p className="font-serif text-sm italic">
@@ -255,16 +240,16 @@ export default function Home() {
 
 
         {/* Featured Advertisements */}
-        <section className="my-12 border-t  border-black py-8">
+        <section className="my-12   border-black py-4 rounded-xl">
           <h2 className="text-3xl md:text-4xl font-serif text-center mb-8">Featured Advertisements</h2>
           <AdvertisementCarousel />
         </section>
 
         {/* Testimonials Section */}
-        <section className="my-12 border-t border-b border-black py-8">
+        <section className="my-12 border-b border-black py-4 rounded-xl">
           <h2 className="font-serif text-3xl font-bold text-center mb-8">What Our Advertisers Say</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="border border-black p-6 bg-white hover:shadow-xl transition-shadow">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 rounded-xl">
+            <div className="border border-black p-6 bg-white hover:shadow-xl transition-shadow rounded-xl">
               <p className="font-serif text-lg italic mb-4">
                 "The vintage aesthetic combined with modern functionality created the perfect showcase for our luxury
                 timepieces."
@@ -279,7 +264,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="border border-black p-6 bg-white hover:shadow-xl transition-shadow">
+            <div className="border border-black p-6 bg-white hover:shadow-xl transition-shadow rounded-xl">
               <p className="font-serif text-lg italic mb-4">
                 "Our campaign in VDoAds delivered a 300% increase in brand recognition among our target
                 demographic."
@@ -294,7 +279,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="border border-black p-6 bg-white hover:shadow-xl transition-shadow">
+            <div className="border border-black p-6 bg-white hover:shadow-xl transition-shadow rounded-xl">
               <p className="font-serif text-lg italic mb-4">
                 "The attention to detail and premium feel of this platform perfectly aligns with our brand values and
                 aesthetic."
@@ -313,7 +298,7 @@ export default function Home() {
         </section>
 
         {/* Call to Action */}
-        <section className="my-12 secondary_bg text-white p-8 text-center">
+        <section className="my-12 secondary_bg text-white p-8 text-center rounded-xl">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">
             Secure Your Premium Advertising Space Today
           </h2>
@@ -321,7 +306,7 @@ export default function Home() {
             Join distinguished brands that understand the value of premium presentation and targeted reach.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-white text-black hover:border-white hover:text-white hover:bg-white/10 rounded-none text-lg px-8">
+            <Button className="bg-white text-black hover:border-white hover:text-white hover:bg-white/10 rounded-xl text-lg px-8">
              Contact Sales Team
             </Button>
             

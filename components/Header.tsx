@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation"
 export function Header() {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated) 
   const dispatch = useDispatch()
   const router = useRouter()
@@ -74,11 +75,11 @@ export function Header() {
               Advertise
             </Link>
           </div>
-          <div className="w-24">
+          {/* <div className="w-24">
             <Link href="/case-studies" className="text-sm font-semibold">
               Case Studies
             </Link>
-          </div>
+          </div> */}
           <div>
             <Link href="/gallery" className="text-sm font-semibold">
               Gallery
@@ -151,72 +152,73 @@ export function Header() {
           </Button>
 
           {/* Mobile Menu */}
-          <Sheet>
+          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-white">
               <SheetTitle></SheetTitle>
               <div className="flex flex-col h-full">
                 <div className="flex items-center justify-between py-4 border-b">
                   <span className="text-lg font-medium">Menu</span>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <X className="h-5 w-5" />
-                    </Button>
+                    
                   </SheetTrigger>
                 </div>
 
                 <nav className="flex flex-col gap-4 py-6">
-                  <Link
-                    href="/dashboard"
-                    className="flex items-center gap-3 px-4 py-2 text-lg hover:bg-gray-100 rounded-md"
-                  >
-                    <LayoutDashboard className="h-5 w-5" />
-                    Dashboard
+                  {/* Desktop-like fields for mobile */}
+                  <Link href="/" className="flex items-center gap-3 px-4 py-2 text-lg hover:bg-gray-100 rounded-md" onClick={() => setIsSheetOpen(false)}>
+                    Home
                   </Link>
-                  <Link
-                    href="/notifications"
-                    className="flex items-center gap-3 px-4 py-2 text-lg hover:bg-gray-100 rounded-md"
-                  >
-                    <Bell className="h-5 w-5" />
-                    Notifications
+                  <Link href="/advertise" className="flex items-center gap-3 px-4 py-2 text-lg hover:bg-gray-100 rounded-md" onClick={() => setIsSheetOpen(false)}>
+                    Advertise
                   </Link>
-                  <div className="px-4 py-2">
-                    <p className="mb-2 text-sm font-medium text-gray-500">Categories</p>
-                    <div className="flex flex-col gap-2 pl-2">
-                      <Link href="/category/cars" className="py-1 hover:underline">
-                        Cars
-                      </Link>
-                      <Link href="/category/electronics" className="py-1 hover:underline">
-                        Electronics
-                      </Link>
-                      <Link href="/category/real-estate" className="py-1 hover:underline">
-                        Real Estate
-                      </Link>
-                      <Link href="/category/jobs" className="py-1 hover:underline">
-                        Jobs
-                      </Link>
-                      <Link href="/category/services" className="py-1 hover:underline">
-                        Services
-                      </Link>
-                    </div>
-                  </div>
+                  {/* <Link href="/case-studies" className="flex items-center gap-3 px-4 py-2 text-lg hover:bg-gray-100 rounded-md" onClick={() => setIsSheetOpen(false)}>
+                    Case Studies
+                  </Link> */}
+                  <Link href="/gallery" className="flex items-center gap-3 px-4 py-2 text-lg hover:bg-gray-100 rounded-md" onClick={() => setIsSheetOpen(false)}>
+                    Gallery
+                  </Link>
+                  <Link href="/contact" className="flex items-center gap-3 px-4 py-2 text-lg hover:bg-gray-100 rounded-md" onClick={() => setIsSheetOpen(false)}>
+                    Contact
+                  </Link>
+                  {/* Dashboard links by role */}
+                  {userRole === 'ADMIN' && (
+                    <Link href="/dashboard/admin" className="flex items-center gap-3 px-4 py-2 text-lg hover:bg-gray-100 rounded-md" onClick={() => setIsSheetOpen(false)}>
+                      <LayoutDashboard className="h-5 w-5" />
+                      Dashboard
+                    </Link>
+                  )}
+                  {userRole === 'USER' && (
+                    <Link href="/dashboard/user" className="flex items-center gap-3 px-4 py-2 text-lg hover:bg-gray-100 rounded-md" onClick={() => setIsSheetOpen(false)}>
+                      <LayoutDashboard className="h-5 w-5" />
+                      Dashboard
+                    </Link>
+                  )}
+                  {userRole === 'ADVERTISER' && (
+                    <Link href="/dashboard/advertiser" className="flex items-center gap-3 px-4 py-2 text-lg hover:bg-gray-100 rounded-md" onClick={() => setIsSheetOpen(false)}>
+                      <LayoutDashboard className="h-5 w-5" />
+                      Dashboard
+                    </Link>
+                  )}
+                  
+                  
                 </nav>
 
                 {/* Mobile Auth Buttons */}
                 <div className="mt-auto border-t py-4 space-y-4">
                   {isAuthenticated ? (
-                    <Button className="w-full" onClick={handleLogout}>
+                    <Button className="w-full" onClick={() => { setIsSheetOpen(false); handleLogout(); }}>
                       Logout
                     </Button>
                   ) : (
                     <>
-                      <Button className="w-full">Register</Button>
-                      <Button variant="outline" className="w-full">
+                      <Button className="w-full" onClick={() => setIsSheetOpen(false)}>Register</Button>
+                      <Button variant="outline" className="w-full" onClick={() => setIsSheetOpen(false)}>
                         Sign In
                       </Button>
                     </>
