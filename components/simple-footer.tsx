@@ -6,7 +6,7 @@ export function SimpleFooter() {
   return (
     <footer className="bg-black text-white py-12">
       <div className="container">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-40">
           <div>
             <h3 className="font-serif text-xl font-bold mb-4">VDoAds</h3>
             <p className="font-serif text-sm">
@@ -43,40 +43,11 @@ export function SimpleFooter() {
               </li>
             </ul>
           </div>
-          <div>
-            <h4 className="font-serif text-lg font-bold mb-4">Resources</h4>
-            <ul className="space-y-2 font-serif text-sm">
-              <li>
-                <Link href="/media-kit" className="hover:underline">
-                  Media Kit
-                </Link>
-              </li>
-              <li>
-                <Link href="/guidelines" className="hover:underline">
-                  Advertising Guidelines
-                </Link>
-              </li>
-              <li>
-                <Link href="/pricing" className="hover:underline">
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link href="/faq" className="hover:underline">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="hover:underline">
-                  Terms & Conditions
-                </Link>
-              </li>
-            </ul>
-          </div>
+          
           <div>
             <h4 className="font-serif text-lg font-bold mb-4">Connect With Us</h4>
             <div className="flex gap-4 mb-4">
-              <Button variant="outline" size="icon" className="rounded-none border-white h-8 w-8">
+              <Button variant="outline" size="icon" className="rounded-none bg-white border-white h-8 w-8">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -92,7 +63,7 @@ export function SimpleFooter() {
                 </svg>
                 <span className="sr-only">Facebook</span>
               </Button>
-              <Button variant="outline" size="icon" className="rounded-none border-white h-8 w-8">
+              <Button variant="outline" size="icon" className="rounded-none bg-white border-white h-8 w-8">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -108,7 +79,7 @@ export function SimpleFooter() {
                 </svg>
                 <span className="sr-only">Twitter</span>
               </Button>
-              <Button variant="outline" size="icon" className="rounded-none border-white h-8 w-8">
+              <Button variant="outline" size="icon" className="rounded-none bg-white border-white h-8 w-8">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -126,7 +97,7 @@ export function SimpleFooter() {
                 </svg>
                 <span className="sr-only">Instagram</span>
               </Button>
-              <Button variant="outline" size="icon" className="rounded-none border-white h-8 w-8">
+              <Button variant="outline" size="icon" className="rounded-none bg-white border-white h-8 w-8">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -145,17 +116,7 @@ export function SimpleFooter() {
                 <span className="sr-only">LinkedIn</span>
               </Button>
             </div>
-            <div className="space-y-2">
-              <p className="font-serif text-sm mb-2">Subscribe to our newsletter:</p>
-              <form className="flex gap-2">
-                <Input
-                  type="email"
-                  placeholder="Email Address"
-                  className="rounded-none bg-transparent border-white px-3 py-2 text-sm flex-1"
-                />
-                <Button className="rounded-none">Subscribe</Button>
-              </form>
-            </div>
+            
           </div>
         </div>
         <div className="border-t border-white/20 mt-8 pt-8 text-center font-serif text-sm">

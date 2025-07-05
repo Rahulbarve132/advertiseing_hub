@@ -30,18 +30,12 @@ export default function Home() {
   })
 
   // Get the most recent featured campaign
-  const mostRecentFeatured = featuredCampaigns && featuredCampaigns.length > 0 ? featuredCampaigns[0] : null
-
-
-
-  
+  const mostRecentFeatured = featuredCampaigns && featuredCampaigns.length > 0 ? featuredCampaigns[0] : null  
 
   return (
     <div className="min-h-screen main_bg rounded-xl">
       {/* Header */}
       <BreakingNewsBanner/>
-    
-
       {/* Main Content */}
       <main className="container py-8 rounded-xl">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 rounded-xl">
@@ -246,7 +240,7 @@ export default function Home() {
         </section>
 
         {/* Testimonials Section */}
-        <section className="my-12 border-b border-black py-4 rounded-xl">
+        <section className="my-12  border-black py-4 rounded-xl">
           <h2 className="font-serif text-3xl font-bold text-center mb-8">What Our Advertisers Say</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 rounded-xl">
             <div className="border border-black p-6 bg-white hover:shadow-xl transition-shadow rounded-xl">
