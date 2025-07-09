@@ -1,5 +1,5 @@
 "use client"
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Link from "next/link"
 import Image from "next/image"
 import { Coffee, Mail, Menu, Search, Sun } from "lucide-react"
@@ -32,6 +32,30 @@ export default function Home() {
   // Get the most recent featured campaign
   const mostRecentFeatured = featuredCampaigns && featuredCampaigns.length > 0 ? featuredCampaigns[0] : null  
 
+  // Auto-advance logic for banner carousel using Embla API
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [emblaApi, setEmblaApi] = useState<any>(null);
+  const bannerCount = bannerCampaigns?.length || 0;
+
+  // Reset to first slide if banner count changes
+  useEffect(() => {
+    setActiveIndex(0);
+    if (emblaApi) emblaApi.scrollTo(0);
+  }, [bannerCount, emblaApi]);
+
+  // Auto-advance carousel every 2 seconds
+  useEffect(() => {
+    if (!bannerCount || bannerLoading || bannerError || !emblaApi) return;
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => {
+        const next = (prev + 1) % bannerCount;
+        emblaApi.scrollTo(next);
+        return next;
+      });
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [bannerCount, bannerLoading, bannerError, emblaApi]);
+
   return (
     <div className="min-h-screen main_bg rounded-xl">
       {/* Header */}
@@ -51,8 +75,8 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="relative aspect-[16/9] overflow-hidden border border-black rounded-xl">
-                <Carousel className="w-full h-full">
+              <div className="relative aspect-[16/9] overflow-hidden border border-black rounded-xl shadow-lg">
+                <Carousel className="w-full h-full" setApi={setEmblaApi}>
                   <CarouselContent>
                     {bannerLoading ? (
                       <CarouselItem>
@@ -76,8 +100,20 @@ export default function Home() {
                   </CarouselContent>
                   {bannerCampaigns.length > 1 && (
                     <>
-                      <CarouselPrevious className="absolute left-4 bg-white/80 hover:bg-white" />
-                      <CarouselNext className="absolute right-4 bg-white/80 hover:bg-white" />
+                      <CarouselPrevious className="absolute left-4 bg-white/80 hover:bg-white" onClick={() => {
+                        setActiveIndex((prev) => {
+                          const next = (prev - 1 + bannerCount) % bannerCount;
+                          if (emblaApi) emblaApi.scrollTo(next);
+                          return next;
+                        });
+                      }} />
+                      <CarouselNext className="absolute right-4 bg-white/80 hover:bg-white" onClick={() => {
+                        setActiveIndex((prev) => {
+                          const next = (prev + 1) % bannerCount;
+                          if (emblaApi) emblaApi.scrollTo(next);
+                          return next;
+                        });
+                      }} />
                     </>
                   )}
                 </Carousel>
